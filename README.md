@@ -38,3 +38,11 @@ Adding a new service to this project is as simple as running `create-platformati
 ```
 npx create-platformatic
 ```
+
+### Seed the DB
+
+To seed the database, run:
+
+```
+npx platformatic db seed seed.ts
+```
