@@ -65,44 +65,6 @@
   },
   {
     "schema": null,
-    "table": "movies",
-    "constraints": [
-      {
-        "column_name": "id",
-        "constraint_type": "PRIMARY KEY"
-      }
-    ],
-    "columns": [
-      {
-        "cid": 0,
-        "name": "id",
-        "type": "INTEGER",
-        "notnull": 0,
-        "dflt_value": null,
-        "pk": 1,
-        "hidden": 0,
-        "column_name": "id",
-        "udt_name": "integer",
-        "is_nullable": "NO",
-        "is_generated": "NO"
-      },
-      {
-        "cid": 1,
-        "name": "title",
-        "type": "TEXT",
-        "notnull": 1,
-        "dflt_value": null,
-        "pk": 0,
-        "hidden": 0,
-        "column_name": "title",
-        "udt_name": "text",
-        "is_nullable": "NO",
-        "is_generated": "NO"
-      }
-    ]
-  },
-  {
-    "schema": null,
     "table": "workouts",
     "constraints": [
       {
