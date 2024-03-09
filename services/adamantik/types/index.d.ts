@@ -1,7 +1,11 @@
-import { Workout } from './Workout'
+import { Mesocycle } from './Mesocycle'
+import { MesocycleTemplate } from './MesocycleTemplate'
+import { User } from './User'
   
 interface EntityTypes  {
-  Workout: Workout
+  Mesocycle: Mesocycle
+    MesocycleTemplate: MesocycleTemplate
+    User: User
 }
   
-export { EntityTypes, Workout }
+export { EntityTypes, Mesocycle, MesocycleTemplate, User }

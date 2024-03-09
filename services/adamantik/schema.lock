@@ -65,11 +65,98 @@
   },
   {
     "schema": null,
-    "table": "workouts",
+    "table": "user",
     "constraints": [
       {
         "column_name": "id",
         "constraint_type": "PRIMARY KEY"
+      }
+    ],
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1,
+        "hidden": 0,
+        "column_name": "id",
+        "udt_name": "integer",
+        "is_nullable": "NO",
+        "is_generated": "NO"
+      },
+      {
+        "cid": 1,
+        "name": "first_name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0,
+        "hidden": 0,
+        "column_name": "first_name",
+        "udt_name": "text",
+        "is_nullable": "NO",
+        "is_generated": "NO"
+      },
+      {
+        "cid": 2,
+        "name": "last_name",
+        "type": "TEXT",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0,
+        "hidden": 0,
+        "column_name": "last_name",
+        "udt_name": "text",
+        "is_nullable": "YES",
+        "is_generated": "NO"
+      },
+      {
+        "cid": 3,
+        "name": "email",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0,
+        "hidden": 0,
+        "column_name": "email",
+        "udt_name": "text",
+        "is_nullable": "NO",
+        "is_generated": "NO"
+      },
+      {
+        "cid": 4,
+        "name": "created_at",
+        "type": "TIMESTAMP",
+        "notnull": 0,
+        "dflt_value": "CURRENT_TIMESTAMP",
+        "pk": 0,
+        "hidden": 0,
+        "column_name": "created_at",
+        "udt_name": "timestamp",
+        "is_nullable": "YES",
+        "is_generated": "NO"
+      }
+    ]
+  },
+  {
+    "schema": null,
+    "table": "mesocycle_template",
+    "constraints": [
+      {
+        "column_name": "id",
+        "constraint_type": "PRIMARY KEY"
+      },
+      {
+        "table_name": "mesocycle_template",
+        "column_name": "user_id",
+        "constraint_type": "FOREIGN KEY",
+        "foreign_table_name": "user",
+        "foreign_column_name": "id",
+        "loweredTableWithSchemaName": "mesocycleTemplate",
+        "foreignEntityName": "user",
+        "entityName": "mesocycleTemplate"
       }
     ],
     "columns": [
@@ -95,6 +182,132 @@
         "pk": 0,
         "hidden": 0,
         "column_name": "name",
+        "udt_name": "text",
+        "is_nullable": "NO",
+        "is_generated": "NO"
+      },
+      {
+        "cid": 2,
+        "name": "user_id",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 0,
+        "hidden": 0,
+        "column_name": "user_id",
+        "udt_name": "integer",
+        "is_nullable": "YES",
+        "is_generated": "NO"
+      },
+      {
+        "cid": 3,
+        "name": "created_at",
+        "type": "TIMESTAMP",
+        "notnull": 0,
+        "dflt_value": "CURRENT_TIMESTAMP",
+        "pk": 0,
+        "hidden": 0,
+        "column_name": "created_at",
+        "udt_name": "timestamp",
+        "is_nullable": "YES",
+        "is_generated": "NO"
+      },
+      {
+        "cid": 4,
+        "name": "template",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0,
+        "hidden": 0,
+        "column_name": "template",
+        "udt_name": "text",
+        "is_nullable": "NO",
+        "is_generated": "NO"
+      }
+    ]
+  },
+  {
+    "schema": null,
+    "table": "mesocycle",
+    "constraints": [
+      {
+        "column_name": "id",
+        "constraint_type": "PRIMARY KEY"
+      },
+      {
+        "table_name": "mesocycle",
+        "column_name": "user_id",
+        "constraint_type": "FOREIGN KEY",
+        "foreign_table_name": "user",
+        "foreign_column_name": "id",
+        "loweredTableWithSchemaName": "mesocycle",
+        "foreignEntityName": "user",
+        "entityName": "mesocycle"
+      }
+    ],
+    "columns": [
+      {
+        "cid": 0,
+        "name": "id",
+        "type": "INTEGER",
+        "notnull": 0,
+        "dflt_value": null,
+        "pk": 1,
+        "hidden": 0,
+        "column_name": "id",
+        "udt_name": "integer",
+        "is_nullable": "NO",
+        "is_generated": "NO"
+      },
+      {
+        "cid": 1,
+        "name": "user_id",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0,
+        "hidden": 0,
+        "column_name": "user_id",
+        "udt_name": "integer",
+        "is_nullable": "NO",
+        "is_generated": "NO"
+      },
+      {
+        "cid": 2,
+        "name": "name",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0,
+        "hidden": 0,
+        "column_name": "name",
+        "udt_name": "text",
+        "is_nullable": "NO",
+        "is_generated": "NO"
+      },
+      {
+        "cid": 3,
+        "name": "created_at",
+        "type": "TIMESTAMP",
+        "notnull": 0,
+        "dflt_value": "CURRENT_TIMESTAMP",
+        "pk": 0,
+        "hidden": 0,
+        "column_name": "created_at",
+        "udt_name": "timestamp",
+        "is_nullable": "YES",
+        "is_generated": "NO"
+      },
+      {
+        "cid": 4,
+        "name": "template",
+        "type": "TEXT",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0,
+        "hidden": 0,
+        "column_name": "template",
         "udt_name": "text",
         "is_nullable": "NO",
         "is_generated": "NO"

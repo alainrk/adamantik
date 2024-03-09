@@ -1,2 +1,3 @@
--- Add SQL in this file to drop the database tables
-DROP TABLE workouts;
+DROP TABLE user;
+DROP TABLE mesocycle_template;
+DROP TABLE mesocycle;

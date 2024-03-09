@@ -1,9 +1,9 @@
 import type { PlatformaticApp, PlatformaticDBMixin, PlatformaticDBConfig, Entity, Entities, EntityHooks } from '@platformatic/db'
-import { EntityTypes, Workout } from './types'
+import { EntityTypes, Mesocycle,MesocycleTemplate,User } from './types'
 
 declare module 'fastify' {
   interface FastifyInstance {
-    getSchema<T extends 'Workout'>(schemaId: T): {
+    getSchema<T extends 'Mesocycle' | 'MesocycleTemplate' | 'User'>(schemaId: T): {
       '$id': string,
       title: string,
       description: string,
@@ -17,11 +17,15 @@ declare module 'fastify' {
 }
 
 interface AppEntities extends Entities {
-  workout: Entity<Workout>,
+  mesocycle: Entity<Mesocycle>,
+    mesocycleTemplate: Entity<MesocycleTemplate>,
+    user: Entity<User>,
 }
 
 interface AppEntityHooks {
-  addEntityHooks(entityName: 'workout', hooks: EntityHooks<Workout>): any
+  addEntityHooks(entityName: 'mesocycle', hooks: EntityHooks<Mesocycle>): any
+    addEntityHooks(entityName: 'mesocycleTemplate', hooks: EntityHooks<MesocycleTemplate>): any
+    addEntityHooks(entityName: 'user', hooks: EntityHooks<User>): any
 }
 
 declare module 'fastify' {
