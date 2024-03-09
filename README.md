@@ -1,5 +1,7 @@
 # [WIP] Adamantik
 
-[logo](./assets/logo.webp)
+<p align="center">
+  <img src='assets/assets/logo.webp' width='400'>
+</p>
 
 Workout tracking app
