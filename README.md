@@ -1,13 +1,21 @@
-# Platformatic Runtime API
+# [WIP] Adamantik
+
+<p align="center">
+  <img src='assets/logo.png' width='400'>
+</p>
+
+Workout tracking app
+
+## Server
 
 This is a generated [Platformatic Runtime](https://docs.platformatic.dev/docs/reference/runtime/introduction) application.
 
-## Requirements
+### Requirements
 
 Platformatic supports macOS, Linux and Windows ([WSL](https://docs.microsoft.com/windows/wsl/) recommended).
 You'll need to have [Node.js](https://nodejs.org/) >= v18.8.0 or >= v20.6.0
 
-## Setup
+### Setup
 
 1. Install dependencies:
 
@@ -15,7 +23,7 @@ You'll need to have [Node.js](https://nodejs.org/) >= v18.8.0 or >= v20.6.0
 npm install
 ```
 
-## Usage
+### Usage
 
 Run the API with:
 
@@ -23,7 +31,7 @@ Run the API with:
 npm start
 ```
 
-## Adding a Service
+### Adding a Service
 
 Adding a new service to this project is as simple as running `create-platformatic` again, like so:
 
