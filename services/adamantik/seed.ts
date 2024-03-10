@@ -1,6 +1,19 @@
 /// <reference path="./global.d.ts" />
 import { Entities } from "@platformatic/sql-mapper";
 
+const MUSCLE_GROUP_CHEST = 1;
+const MUSCLE_GROUP_ABS = 2;
+const MUSCLE_GROUP_BACK = 3;
+const MUSCLE_GROUP_TRAPS_SHOULDERS = 4;
+const MUSCLE_GROUP_FOREARMS = 5;
+const MUSCLE_GROUP_CORE = 6;
+const MUSCLE_GROUP_CALVES = 7;
+const MUSCLE_GROUP_GLUTES = 8;
+const MUSCLE_GROUP_HAMSTRINGS = 9;
+const MUSCLE_GROUP_QUADS = 10;
+const MUSCLE_GROUP_TRICEPS = 11;
+const MUSCLE_GROUP_BICEPS = 12;
+
 const users: object[] = [
   {
     id: 1,
@@ -19,16 +32,23 @@ const users: object[] = [
 const exercises: object[] = [
   {
     id: 1,
-    muscle_group: 1,
-    name: "Squats",
-    video_url: "https://www.example.com/squats",
+    muscle_group: MUSCLE_GROUP_QUADS,
+    name: "High Bar Squat",
+    video_url: "https://www.youtube.com/watch?v=i7J5h7BJ07g",
     user_id: null,
   },
   {
     id: 2,
-    muscle_group: 2,
-    name: "Bench Press",
-    video_url: "https://www.example.com/benchpress",
+    muscle_group: MUSCLE_GROUP_CHEST,
+    name: "Bench Press (Wide Grip)",
+    video_url: "https://www.youtube.com/watch?v=EeE3f4VWFDo",
+    user_id: null,
+  },
+  {
+    id: 3,
+    muscle_group: MUSCLE_GROUP_BACK,
+    name: "Pulldown (Normal Grip)",
+    video_url: "https://www.youtube.com/watch?v=EUIri47Epcg",
     user_id: null,
   },
 ];
@@ -36,11 +56,33 @@ const exercises: object[] = [
 const mesocycleTemplates: object[] = [
   {
     id: 1,
-    name: "Strength Training",
+    name: "Strength Training General",
     focus: "strength",
     user_id: null,
-    template:
-      '{"week1": {"day1": [{"exercise_id": 1, "sets": {"sets": 4, "reps": 6}, "weight": 100, "expected_rir": 2}], "day2": []}}',
+    template: JSON.stringify({
+      days: [
+        // Exercise IDs for Day 1
+        [1, 2],
+        // Exercise IDs for Day 2
+        [1, 2],
+        // Exercise IDs for Day 3
+        [2, 3],
+      ],
+    }),
+  },
+  {
+    id: 2,
+    name: "Bodydbuilding Full Body",
+    focus: "fullbody",
+    user_id: 1, // Private template of user 1
+    template: JSON.stringify({
+      days: [
+        // Exercise IDs for Day 1
+        [1, 2],
+        // Exercise IDs for Day 2
+        [2, 3],
+      ],
+    }),
   },
 ];
 
