@@ -7,7 +7,6 @@ import {
   Exercise,
   ExerciseInstance,
   Week,
-  WeekTemplate,
   Workout,
 } from "./types";
 
@@ -69,6 +68,7 @@ const mesocycleTemplates: MesocycleTemplate[] = [
     name: "Strength Training General",
     focus: "strength",
     userId: null,
+    numberOfDays: 3,
     template: JSON.stringify({
       days: [
         // Exercise IDs for Day 1
@@ -85,6 +85,7 @@ const mesocycleTemplates: MesocycleTemplate[] = [
     name: "Bodydbuilding Full Body",
     focus: "fullbody",
     userId: 1, // Private template of user 1
+    numberOfDays: 2,
     template: JSON.stringify({
       days: [
         // Exercise IDs for Day 1
@@ -101,7 +102,9 @@ const mesocycles: Mesocycle[] = [
     id: 1,
     userId: 1,
     name: "Bodybuilding Winter 2024",
+    focus: "fullbody",
     numberOfWeeks: 3,
+    numberOfDays: 2,
     template: JSON.stringify({
       days: [
         [1, 2],
@@ -113,6 +116,8 @@ const mesocycles: Mesocycle[] = [
     id: 2,
     userId: 2,
     numberOfWeeks: 3,
+    numberOfDays: 4,
+    focus: "strength",
     name: "Bench press prep 2024",
     template: JSON.stringify({
       days: [[1], [3], [2], [1]],
@@ -122,6 +127,8 @@ const mesocycles: Mesocycle[] = [
     id: 3,
     userId: 2,
     numberOfWeeks: 3,
+    numberOfDays: 4,
+    focus: "strength",
     name: "Bench press prep 2025",
     template: JSON.stringify({
       days: [[1], [1], [1, 2, 3], [1]],
@@ -132,41 +139,67 @@ const mesocycles: Mesocycle[] = [
 // Define a function that given a list of objects, returns a list of objects
 // with the same structure but with an additional property.
 const weeks: Week[] = ((mesos: Mesocycle[]): Week[] => {
-  const weeks = [];
+  const weeks: Week[] = [];
+  let c = 0;
   for (const meso of mesos) {
     for (let i = 0; i < meso.numberOfWeeks; i++) {
+      c++;
       weeks.push({
-        id: i + 1,
-        relative_order: i,
-        mesocycle_id: meso.id,
-        completed_at: null,
+        // @ts-ignore-next-line
+        _template: meso.template, // Just to then internally keep it for convenience later
+        id: c,
+        relativeOrder: i,
+        mesocycleId: meso.id || 0,
+        completedAt: null,
       });
     }
   }
   return weeks;
 })(mesocycles);
 
-const workouts: object[] = [
-  {
-    id: 1,
-    relative_order: 1,
-    week_id: 1,
-    completed_at: null,
-  },
-];
+const workouts: Workout[] = ((weeks: Week[]): Workout[] => {
+  const workouts: Workout[] = [];
+  let c = 0;
+  for (const week of weeks) {
+    // @ts-ignore-next-line
+    const template = JSON.parse(week._template);
+    for (let i = 0; i < template.days.length; i++) {
+      c++;
+      workouts.push({
+        id: c,
+        relativeOrder: i,
+        weekId: week.id || 0,
+        completedAt: null,
+      });
+    }
+  }
+  return workouts;
+})(weeks);
 
-const exerciseInstances: object[] = [
-  {
-    id: 1,
-    relative_order: 1,
-    exercise_id: 1,
-    workout_id: 1,
-    weight: 100,
-    expected_rir: 2,
-    feedback: "{}",
-    sets: '{"sets": 4, "reps": 6}',
-  },
-];
+const exerciseInstances: ExerciseInstance[] = ((
+  workouts: Workout[]
+): ExerciseInstance[] => {
+  const exerciseInstances: ExerciseInstance[] = [];
+  let c = 0;
+  for (const workout of workouts) {
+    // @ts-ignore-next-line
+    const template = JSON.parse(workout._template);
+    for (let i = 0; i < template.days[workout.relativeOrder].length; i++) {
+      c++;
+      exerciseInstances.push({
+        id: c,
+        relativeOrder: i,
+        exerciseId: template.days[workout.relativeOrder][i],
+        workoutId: workout.id || 0,
+        weight: 100,
+        expectedRir: 2,
+        feedback: '{ "soreness": 5, "recover": 3, "pain": 0 }',
+        sets: "[10, 8, 7]",
+      });
+    }
+  }
+  return exerciseInstances;
+})(workouts);
 
 export async function seed(opts: { entities: Entities }) {
   for (const user of users) {

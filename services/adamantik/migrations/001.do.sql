@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS mesocycle_template (
   name TEXT NOT NULL,
   focus TEXT NOT NULL, -- Enum for target focus (e.g. strength, general hypertrophy, bench, muscle group...)
   user_id INTEGER, -- NULL for global templates
+  number_of_days INTEGER NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   template TEXT NOT NULL, -- JSON with template week by week
   FOREIGN KEY (user_id) REFERENCES user(id)
@@ -32,6 +33,7 @@ CREATE TABLE IF NOT EXISTS mesocycle (
   name TEXT NOT NULL,
   focus TEXT NOT NULL, -- Enum for target focus (e.g. strength, general hypertrophy, bench, muscle group...)
   number_of_weeks INTEGER NOT NULL, -- Planned number of weeks for the mesocycle
+  number_of_days INTEGER NOT NULL, -- Planned number of days for the mesocycle
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   template TEXT NOT NULL, -- JSON with template week by week
   FOREIGN KEY (user_id) REFERENCES user(id)
@@ -42,6 +44,7 @@ CREATE TABLE IF NOT EXISTS mesocycle (
 -- From then on, the week is created from the previous week
 CREATE TABLE IF NOT EXISTS week (
   id INTEGER PRIMARY KEY,
+  number_of_days INTEGER NOT NULL, -- Planned number of days for the week
   relative_order INTEGER NOT NULL, -- Week number in the mesocycle (< mesocycle.number_of_weeks)
   mesocycle_id INTEGER NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

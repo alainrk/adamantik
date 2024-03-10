@@ -7,6 +7,7 @@ declare interface MesocycleTemplate {
     createdAt?: string | null;
     focus: string;
     name: string;
+    numberOfDays: number;
     template: string;
     userId?: number | null;
 }

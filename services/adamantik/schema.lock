@@ -304,6 +304,19 @@
       },
       {
         "cid": 4,
+        "name": "number_of_days",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0,
+        "hidden": 0,
+        "column_name": "number_of_days",
+        "udt_name": "integer",
+        "is_nullable": "NO",
+        "is_generated": "NO"
+      },
+      {
+        "cid": 5,
         "name": "created_at",
         "type": "TIMESTAMP",
         "notnull": 0,
@@ -316,7 +329,7 @@
         "is_generated": "NO"
       },
       {
-        "cid": 5,
+        "cid": 6,
         "name": "template",
         "type": "TEXT",
         "notnull": 1,
@@ -417,6 +430,19 @@
       },
       {
         "cid": 5,
+        "name": "number_of_days",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0,
+        "hidden": 0,
+        "column_name": "number_of_days",
+        "udt_name": "integer",
+        "is_nullable": "NO",
+        "is_generated": "NO"
+      },
+      {
+        "cid": 6,
         "name": "created_at",
         "type": "TIMESTAMP",
         "notnull": 0,
@@ -429,7 +455,7 @@
         "is_generated": "NO"
       },
       {
-        "cid": 6,
+        "cid": 7,
         "name": "template",
         "type": "TEXT",
         "notnull": 1,
@@ -478,6 +504,19 @@
       },
       {
         "cid": 1,
+        "name": "number_of_days",
+        "type": "INTEGER",
+        "notnull": 1,
+        "dflt_value": null,
+        "pk": 0,
+        "hidden": 0,
+        "column_name": "number_of_days",
+        "udt_name": "integer",
+        "is_nullable": "NO",
+        "is_generated": "NO"
+      },
+      {
+        "cid": 2,
         "name": "relative_order",
         "type": "INTEGER",
         "notnull": 1,
@@ -490,7 +529,7 @@
         "is_generated": "NO"
       },
       {
-        "cid": 2,
+        "cid": 3,
         "name": "mesocycle_id",
         "type": "INTEGER",
         "notnull": 1,
@@ -503,7 +542,7 @@
         "is_generated": "NO"
       },
       {
-        "cid": 3,
+        "cid": 4,
         "name": "created_at",
         "type": "TIMESTAMP",
         "notnull": 0,
@@ -516,7 +555,7 @@
         "is_generated": "NO"
       },
       {
-        "cid": 4,
+        "cid": 5,
         "name": "completed_at",
         "type": "TIMESTAMP",
         "notnull": 0,

@@ -7,6 +7,7 @@ declare interface Mesocycle {
     createdAt?: string | null;
     focus: string;
     name: string;
+    numberOfDays: number;
     numberOfWeeks: number;
     template: string;
     userId: number;

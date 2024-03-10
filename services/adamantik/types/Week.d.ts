@@ -7,6 +7,7 @@ declare interface Week {
     completedAt?: string | null;
     createdAt?: string | null;
     mesocycleId: number;
+    numberOfDays: number;
     relativeOrder: number;
 }
 export { Week };
