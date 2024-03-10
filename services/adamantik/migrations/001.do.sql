@@ -25,21 +25,13 @@ CREATE TABLE IF NOT EXISTS mesocycle_template (
   FOREIGN KEY (user_id) REFERENCES user(id)
 );
 
--- Week template is the "abstract class" for an actual week in
--- a mesocycle (i.e. each mesocycle_template only has 1 week_template)
-CREATE TABLE IF NOT EXISTS week_template (
-  id INTEGER PRIMARY KEY,
-  mesocycle_template_id INTEGER NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  template TEXT NOT NULL, -- JSON with template (list of exercises for that day of the week)
-  FOREIGN KEY (mesocycle_template_id) REFERENCES mesocycle_template(id)
-);
-
 -- Actual mesocycle instance
 CREATE TABLE IF NOT EXISTS mesocycle (
   id INTEGER PRIMARY KEY,
   user_id INTEGER NOT NULL,
   name TEXT NOT NULL,
+  focus TEXT NOT NULL, -- Enum for target focus (e.g. strength, general hypertrophy, bench, muscle group...)
+  number_of_weeks INTEGER NOT NULL, -- Planned number of weeks for the mesocycle
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   template TEXT NOT NULL, -- JSON with template week by week
   FOREIGN KEY (user_id) REFERENCES user(id)
@@ -50,6 +42,7 @@ CREATE TABLE IF NOT EXISTS mesocycle (
 -- From then on, the week is created from the previous week
 CREATE TABLE IF NOT EXISTS week (
   id INTEGER PRIMARY KEY,
+  relative_order INTEGER NOT NULL, -- Week number in the mesocycle (< mesocycle.number_of_weeks)
   mesocycle_id INTEGER NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   completed_at TIMESTAMP,

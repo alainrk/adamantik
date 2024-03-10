@@ -4,7 +4,6 @@ import { Mesocycle } from './Mesocycle'
 import { MesocycleTemplate } from './MesocycleTemplate'
 import { User } from './User'
 import { Week } from './Week'
-import { WeekTemplate } from './WeekTemplate'
 import { Workout } from './Workout'
   
 interface EntityTypes  {
@@ -14,8 +13,7 @@ interface EntityTypes  {
     MesocycleTemplate: MesocycleTemplate
     User: User
     Week: Week
-    WeekTemplate: WeekTemplate
     Workout: Workout
 }
   
-export { EntityTypes, Exercise, ExerciseInstance, Mesocycle, MesocycleTemplate, User, Week, WeekTemplate, Workout }
+export { EntityTypes, Exercise, ExerciseInstance, Mesocycle, MesocycleTemplate, User, Week, Workout }

@@ -1,5 +1,15 @@
 /// <reference path="./global.d.ts" />
 import { Entities } from "@platformatic/sql-mapper";
+import {
+  Mesocycle,
+  MesocycleTemplate,
+  User,
+  Exercise,
+  ExerciseInstance,
+  Week,
+  WeekTemplate,
+  Workout,
+} from "./types";
 
 const MUSCLE_GROUP_CHEST = 1;
 const MUSCLE_GROUP_ABS = 2;
@@ -14,51 +24,51 @@ const MUSCLE_GROUP_QUADS = 10;
 const MUSCLE_GROUP_TRICEPS = 11;
 const MUSCLE_GROUP_BICEPS = 12;
 
-const users: object[] = [
+const users: User[] = [
   {
     id: 1,
-    first_name: "John",
-    last_name: "Doe",
+    firstName: "John",
+    lastName: "Doe",
     email: "john.doe@example.com",
   },
   {
     id: 2,
-    first_name: "Jane",
-    last_name: "Smith",
+    firstName: "Jane",
+    lastName: "Smith",
     email: "jane.smith@example.com",
   },
 ];
 
-const exercises: object[] = [
+const exercises: Exercise[] = [
   {
     id: 1,
-    muscle_group: MUSCLE_GROUP_QUADS,
+    muscleGroup: MUSCLE_GROUP_QUADS,
     name: "High Bar Squat",
-    video_url: "https://www.youtube.com/watch?v=i7J5h7BJ07g",
-    user_id: null,
+    videoUrl: "https://www.youtube.com/watch?v=i7J5h7BJ07g",
+    userId: null,
   },
   {
     id: 2,
-    muscle_group: MUSCLE_GROUP_CHEST,
+    muscleGroup: MUSCLE_GROUP_CHEST,
     name: "Bench Press (Wide Grip)",
-    video_url: "https://www.youtube.com/watch?v=EeE3f4VWFDo",
-    user_id: null,
+    videoUrl: "https://www.youtube.com/watch?v=EeE3f4VWFDo",
+    userId: null,
   },
   {
     id: 3,
-    muscle_group: MUSCLE_GROUP_BACK,
+    muscleGroup: MUSCLE_GROUP_BACK,
     name: "Pulldown (Normal Grip)",
-    video_url: "https://www.youtube.com/watch?v=EUIri47Epcg",
-    user_id: null,
+    videoUrl: "https://www.youtube.com/watch?v=EUIri47Epcg",
+    userId: null,
   },
 ];
 
-const mesocycleTemplates: object[] = [
+const mesocycleTemplates: MesocycleTemplate[] = [
   {
     id: 1,
     name: "Strength Training General",
     focus: "strength",
-    user_id: null,
+    userId: null,
     template: JSON.stringify({
       days: [
         // Exercise IDs for Day 1
@@ -74,7 +84,7 @@ const mesocycleTemplates: object[] = [
     id: 2,
     name: "Bodydbuilding Full Body",
     focus: "fullbody",
-    user_id: 1, // Private template of user 1
+    userId: 1, // Private template of user 1
     template: JSON.stringify({
       days: [
         // Exercise IDs for Day 1
@@ -86,32 +96,55 @@ const mesocycleTemplates: object[] = [
   },
 ];
 
-const weekTemplates: object[] = [
+const mesocycles: Mesocycle[] = [
   {
     id: 1,
-    mesocycle_template_id: 1,
-    template:
-      '{"day1": [{"exercise_id": 1, "sets": {"sets": 4, "reps": 6}, "weight": 100, "expected_rir": 2}], "day2": []}',
+    userId: 1,
+    name: "Bodybuilding Winter 2024",
+    numberOfWeeks: 3,
+    template: JSON.stringify({
+      days: [
+        [1, 2],
+        [2, 3],
+      ],
+    }),
+  },
+  {
+    id: 2,
+    userId: 2,
+    numberOfWeeks: 3,
+    name: "Bench press prep 2024",
+    template: JSON.stringify({
+      days: [[1], [3], [2], [1]],
+    }),
+  },
+  {
+    id: 3,
+    userId: 2,
+    numberOfWeeks: 3,
+    name: "Bench press prep 2025",
+    template: JSON.stringify({
+      days: [[1], [1], [1, 2, 3], [1]],
+    }),
   },
 ];
 
-const mesocycles: object[] = [
-  {
-    id: 1,
-    user_id: 1,
-    name: "First Mesocycle",
-    template:
-      '{"week1": {"day1": [{"exercise_id": 1, "sets": {"sets": 4, "reps": 6}, "weight": 100, "expected_rir": 2}], "day2": []}}',
-  },
-];
-
-const weeks: object[] = [
-  {
-    id: 1,
-    mesocycle_id: 1,
-    completed_at: null,
-  },
-];
+// Define a function that given a list of objects, returns a list of objects
+// with the same structure but with an additional property.
+const weeks: Week[] = ((mesos: Mesocycle[]): Week[] => {
+  const weeks = [];
+  for (const meso of mesos) {
+    for (let i = 0; i < meso.numberOfWeeks; i++) {
+      weeks.push({
+        id: i + 1,
+        relative_order: i,
+        mesocycle_id: meso.id,
+        completed_at: null,
+      });
+    }
+  }
+  return weeks;
+})(mesocycles);
 
 const workouts: object[] = [
   {
@@ -144,9 +177,6 @@ export async function seed(opts: { entities: Entities }) {
   }
   for (const mesocycleTemplate of mesocycleTemplates) {
     await opts.entities.mesocycleTemplate.save({ input: mesocycleTemplate });
-  }
-  for (const weekTemplate of weekTemplates) {
-    await opts.entities.weekTemplate.save({ input: weekTemplate });
   }
   for (const mesocycle of mesocycles) {
     await opts.entities.mesocycle.save({ input: mesocycle });
