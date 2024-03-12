@@ -22,6 +22,7 @@ const MUSCLE_GROUP_HAMSTRINGS = 9;
 const MUSCLE_GROUP_QUADS = 10;
 const MUSCLE_GROUP_TRICEPS = 11;
 const MUSCLE_GROUP_BICEPS = 12;
+const MUSCLE_GROUP_TRAPS = 13;
 
 const users: User[] = [
   {
@@ -146,7 +147,8 @@ const weeks: Week[] = ((mesos: Mesocycle[]): Week[] => {
       c++;
       weeks.push({
         // @ts-ignore-next-line
-        _template: meso.template, // Just to then internally keep it for convenience later
+        _template: JSON.parse(meso.template), // Just to then internally keep it for convenience later
+        numberOfDays: meso.numberOfDays,
         id: c,
         relativeOrder: i,
         mesocycleId: meso.id || 0,
@@ -162,10 +164,11 @@ const workouts: Workout[] = ((weeks: Week[]): Workout[] => {
   let c = 0;
   for (const week of weeks) {
     // @ts-ignore-next-line
-    const template = JSON.parse(week._template);
-    for (let i = 0; i < template.days.length; i++) {
+    for (let i = 0; i < week._template.days.length; i++) {
       c++;
       workouts.push({
+        // @ts-ignore-next-line
+        _template: week._template,
         id: c,
         relativeOrder: i,
         weekId: week.id || 0,
@@ -183,7 +186,7 @@ const exerciseInstances: ExerciseInstance[] = ((
   let c = 0;
   for (const workout of workouts) {
     // @ts-ignore-next-line
-    const template = JSON.parse(workout._template);
+    const template = workout._template;
     for (let i = 0; i < template.days[workout.relativeOrder].length; i++) {
       c++;
       exerciseInstances.push({
@@ -215,9 +218,13 @@ export async function seed(opts: { entities: Entities }) {
     await opts.entities.mesocycle.save({ input: mesocycle });
   }
   for (const week of weeks) {
+    // @ts-ignore-next-line
+    delete week._template;
     await opts.entities.week.save({ input: week });
   }
   for (const workout of workouts) {
+    // @ts-ignore-next-line
+    delete workout._template;
     await opts.entities.workout.save({ input: workout });
   }
   for (const exerciseInstance of exerciseInstances) {
