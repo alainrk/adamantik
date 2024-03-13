@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS exercise_instance (
   exercise_id INTEGER NOT NULL,
   workout_id INTEGER NOT NULL,
   weight INTEGER NOT NULL, -- Weight for the entire exercise this day (i.e. downsets are separate exercise instances)
-  expected_rir INTEGER NOT NULL, -- RIR for the exercise this day
+  expected_rir INTEGER NOT NULL, -- RIR for the exercise this day [TODO: Put this in the week or workout instead?]
   feedback TEXT NOT NULL, -- JSON with feedback for the exercise this day
   sets TEXT, -- JSON with Sets x Reps for the exercise this day
   FOREIGN KEY (exercise_id) REFERENCES exercise(id),
