@@ -49,38 +49,38 @@ npx platformatic db seed seed.ts
 
 ### GraphQL Example
 
-```
+```graphql
 query users {
- user {
-  mesocycle {
-    id
-    name
-    focus
-    template
-    week {
-    id
-  	workout {
-    id
-    exerciseInstance {
-      workout {
-        id
-      }
+  user {
+    mesocycle {
       id
-      sets
-      exercise {
-        name
+      name
+      focus
+      template
+      week {
+        id
+        workout {
+          id
+          exerciseInstance {
+            workout {
+              id
+            }
+            id
+            sets
+            exercise {
+              name
+            }
+          }
+        }
       }
     }
+    mesocycleTemplate {
+      name
+      focus
+      numberOfDays
+      template
+    }
   }
-  }
-  }
-  mesocycleTemplate {
-    name
-    focus
-    numberOfDays
-    template
-  }
-}
 }
 
 query mesostempl {
@@ -106,21 +106,21 @@ query exerciseInstances {
 }
 
 query weeks {
-	week {
+  week {
     id
-  	workout {
-    id
-    exerciseInstance {
-      workout {
-        id
-      }
+    workout {
       id
-      sets
-      exercise {
-        name
+      exerciseInstance {
+        workout {
+          id
+        }
+        id
+        sets
+        exercise {
+          name
+        }
       }
     }
-  }
   }
 }
 ```
