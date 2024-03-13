@@ -46,3 +46,81 @@ To seed the database, run:
 ```
 npx platformatic db seed seed.ts
 ```
+
+### GraphQL Example
+
+```
+query users {
+ user {
+  mesocycle {
+    id
+    name
+    focus
+    template
+    week {
+    id
+  	workout {
+    id
+    exerciseInstance {
+      workout {
+        id
+      }
+      id
+      sets
+      exercise {
+        name
+      }
+    }
+  }
+  }
+  }
+  mesocycleTemplate {
+    name
+    focus
+    numberOfDays
+    template
+  }
+}
+}
+
+query mesostempl {
+  mesocycleTemplate {
+    name
+    focus
+    numberOfDays
+    template
+  }
+}
+
+query exerciseInstances {
+  exerciseInstance {
+    relativeOrder
+    weight
+    expectedRir
+    feedback
+    sets
+    workout {
+      id
+    }
+  }
+}
+
+query weeks {
+	week {
+    id
+  	workout {
+    id
+    exerciseInstance {
+      workout {
+        id
+      }
+      id
+      sets
+      exercise {
+        name
+      }
+    }
+  }
+  }
+}
+```

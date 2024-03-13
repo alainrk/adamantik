@@ -184,20 +184,35 @@ const exerciseInstances: ExerciseInstance[] = ((
 ): ExerciseInstance[] => {
   const exerciseInstances: ExerciseInstance[] = [];
   let c = 0;
+
+  // TODO: This will eventually be in the week (or at most workout) instead
+  const expectedRir = Math.floor(Math.random() * 4); // 0..3
   for (const workout of workouts) {
     // @ts-ignore-next-line
     const template = workout._template;
+
     for (let i = 0; i < template.days[workout.relativeOrder].length; i++) {
       c++;
+
+      const weight = Math.floor(Math.random() * 100) + 10;
+      const soreness = Math.floor(Math.random() * 3); // 0..2
+      const recover = Math.floor(Math.random() * 3); // 0..2
+      const pain = Math.floor(Math.random() * 3) + 1; // 0..2
+      const sets = [Math.floor(Math.random() * 5) + 1]; // 1..5
+      for (let i = 1; i < Math.floor(Math.random() * 4) + 1; i++) {
+        // Avoid going below 1
+        sets.push(Math.max(1, sets[i - 1] - Math.floor(Math.random() * 3)));
+      }
+
       exerciseInstances.push({
         id: c,
         relativeOrder: i,
         exerciseId: template.days[workout.relativeOrder][i],
         workoutId: workout.id || 0,
-        weight: 100,
-        expectedRir: 2,
-        feedback: '{ "soreness": 5, "recover": 3, "pain": 0 }',
-        sets: "[10, 8, 7]",
+        weight,
+        expectedRir,
+        feedback: `{ "soreness": ${soreness}, "recover": ${recover}, "pain": ${pain} }`,
+        sets: JSON.stringify(sets),
       });
     }
   }
