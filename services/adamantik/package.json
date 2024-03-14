@@ -2,17 +2,18 @@
   "version": "0.0.1",
   "scripts": {
     "start": "platformatic start",
-    "test": "node --test test/**",
+    "test": "node --import tsx --test test/**",
     "clean": "rm -fr ./dist",
     "build": "platformatic compile"
   },
   "devDependencies": {
     "fastify": "^4.26.0",
+    "tsx": "^4.7.1",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "platformatic": "^1.26.0",
-    "@platformatic/db": "^1.26.0"
+    "@platformatic/db": "^1.26.0",
+    "platformatic": "^1.26.0"
   },
   "engines": {
     "node": "^18.8.0 || >=20.6.0"
