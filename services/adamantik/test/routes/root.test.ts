@@ -1,7 +1,6 @@
 import test from "node:test";
 import assert from "node:assert";
 import { getServer } from "../helper";
-import { version } from "../../package.json";
 
 test("root", async (t) => {
   const server = await getServer(t);
@@ -12,6 +11,6 @@ test("root", async (t) => {
 
   assert.strictEqual(res.statusCode, 200);
   assert.deepStrictEqual(res.json(), {
-    version: version,
+    status: "ok",
   });
 });

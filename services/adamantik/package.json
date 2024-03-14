@@ -2,7 +2,8 @@
   "version": "0.0.1",
   "scripts": {
     "start": "platformatic start",
-    "test": "node --import tsx --test test/**",
+    "test": "node --test test/**",
+    "test:ts": "node --import tsx --test test/**/*.ts",
     "clean": "rm -fr ./dist",
     "build": "platformatic compile"
   },
