@@ -24,9 +24,9 @@ export async function getServer(t: TestContext) {
 
   // We go up two folder because this files executes in the dist folder
   const config = JSON.parse(
-    // await readFile(join(__dirname, "..", "..", "platformatic.json"), "utf8")
+    await readFile(join(__dirname, "..", "..", "platformatic.json"), "utf8")
     // If running test:ts it will be one folder up
-    await readFile(join(__dirname, "..", "platformatic.json"), "utf8")
+    // await readFile(join(__dirname, "..", "platformatic.json"), "utf8")
   );
   // Add your config customizations here. For example you want to set
   // all things that are set in the config file to read from an env variable
