@@ -253,14 +253,17 @@ async function main() {
   }
 
   for (const week of weeks) {
+    // @ts-ignore-next-line
+    delete week._template;
     const u = await prisma.week.create({
       data: week,
     });
     console.log(`Created week with id: ${u.id}`);
   }
-  return;
 
   for (const workout of workouts) {
+    // @ts-ignore-next-line
+    delete workout._template;
     const u = await prisma.workout.create({
       data: workout,
     });
