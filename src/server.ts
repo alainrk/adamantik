@@ -16,6 +16,7 @@ const envToLogger = {
 };
 
 const app = fastify({
+  // TODO: Config setup including env
   logger: envToLogger["development"],
 });
 
