@@ -231,8 +231,6 @@ async function main() {
     console.log(`Created user with id: ${u.id}`);
   }
 
-  return;
-
   for (const exercise of exercises) {
     const u = await prisma.exercise.create({
       data: exercise,
@@ -260,6 +258,7 @@ async function main() {
     });
     console.log(`Created week with id: ${u.id}`);
   }
+  return;
 
   for (const workout of workouts) {
     const u = await prisma.workout.create({
