@@ -1,6 +1,5 @@
 import { FastifyInstance, FastifyRequest } from "fastify";
 import { PrismaClient } from "@prisma/client";
-import { User } from "../../types";
 
 // TODO: Initialize globally in fastify (I suppose)
 const prisma = new PrismaClient();
@@ -16,12 +15,17 @@ type UserRequest = FastifyRequest<{
 export default async function users(app: FastifyInstance) {
   app.get("/users", async (req: UsersRequest, res) => {
     const { cursor, take } = req.query;
-    const users = await prisma.user.findMany({
-      cursor: { id: cursor ? Number(cursor) : 0 },
+    const opts = {
+      cursor: { id: Number(cursor) },
       skip: !!cursor ? 1 : 0,
       take: Number(take) || 10,
       orderBy: { id: "asc" },
-    });
+    };
+    // TODO: Solve these two TS issues
+    // @ts-ignore
+    if (!cursor) delete opts.cursor;
+    // @ts-ignore
+    const users = await prisma.user.findMany(opts);
     const newCursor = users[users.length - 1]?.id;
     return { users, newCursor };
   });
