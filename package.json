@@ -1,18 +1,25 @@
 {
+  "name": "rest-express",
+  "version": "1.0.0",
+  "license": "MIT",
   "scripts": {
-    "start": "platformatic start",
-    "test": "node --test test/*/*.test.js",
-    "clean": "rm -fr ./dist",
-    "build": "platformatic compile"
-  },
-  "devDependencies": {
-    "fastify": "^4.26.0",
-    "typescript": "^5.3.3"
+    "dev:orig": "ts-node src/index.ts",
+    "build": "tsc",
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node-dev src/index.ts'",
+    "seed": "npx prisma migrate dev --name init"
   },
   "dependencies": {
-    "platformatic": "^1.26.0"
+    "@prisma/client": "5.11.0",
+    "fastify": "4.26.2"
   },
-  "engines": {
-    "node": "^18.8.0 || >=20.6.0"
+  "devDependencies": {
+    "@types/node": "20.11.28",
+    "prisma": "5.11.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "5.4.2"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }
