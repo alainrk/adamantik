@@ -1,5 +1,5 @@
-/// <reference path="./global.d.ts" />
-import { Entities } from "@platformatic/sql-mapper";
+import { PrismaClient, Prisma } from "@prisma/client";
+
 import {
   Mesocycle,
   MesocycleTemplate,
@@ -8,7 +8,7 @@ import {
   ExerciseInstance,
   Week,
   Workout,
-} from "./types";
+} from "../types";
 
 const MUSCLE_GROUP_CHEST = 1;
 const MUSCLE_GROUP_ABS = 2;
@@ -219,30 +219,73 @@ const exerciseInstances: ExerciseInstance[] = ((
   return exerciseInstances;
 })(workouts);
 
-export async function seed(opts: { entities: Entities }) {
+const prisma = new PrismaClient();
+
+async function main() {
+  console.log(`Start seeding ...`);
+
   for (const user of users) {
-    await opts.entities.user.save({ input: user });
+    const u = await prisma.user.create({
+      data: user,
+    });
+    console.log(`Created user with id: ${u.id}`);
   }
+
   for (const exercise of exercises) {
-    await opts.entities.exercise.save({ input: exercise });
+    const u = await prisma.exercise.create({
+      data: exercise,
+    });
+    console.log(`Created exercise with id: ${u.id}`);
   }
+
   for (const mesocycleTemplate of mesocycleTemplates) {
-    await opts.entities.mesocycleTemplate.save({ input: mesocycleTemplate });
+    const u = await prisma.mesocycleTemplate.create({
+      data: mesocycleTemplate,
+    });
+    console.log(`Created mesocycleTemplate with id: ${u.id}`);
   }
+
   for (const mesocycle of mesocycles) {
-    await opts.entities.mesocycle.save({ input: mesocycle });
+    const u = await prisma.mesocycle.create({
+      data: mesocycle,
+    });
+    console.log(`Created mesocycle with id: ${u.id}`);
   }
+
   for (const week of weeks) {
     // @ts-ignore-next-line
     delete week._template;
-    await opts.entities.week.save({ input: week });
+    const u = await prisma.week.create({
+      data: week,
+    });
+    console.log(`Created week with id: ${u.id}`);
   }
+
   for (const workout of workouts) {
     // @ts-ignore-next-line
     delete workout._template;
-    await opts.entities.workout.save({ input: workout });
+    const u = await prisma.workout.create({
+      data: workout,
+    });
+    console.log(`Created workout with id: ${u.id}`);
   }
+
   for (const exerciseInstance of exerciseInstances) {
-    await opts.entities.exerciseInstance.save({ input: exerciseInstance });
+    const u = await prisma.exerciseInstance.create({
+      data: exerciseInstance,
+    });
+    console.log(`Created exerciseInstance with id: ${u.id}`);
   }
+
+  console.log(`Seeding finished.`);
 }
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
