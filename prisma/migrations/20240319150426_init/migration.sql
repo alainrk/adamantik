@@ -50,8 +50,10 @@ CREATE TABLE "mesocycle_template" (
 -- CreateTable
 CREATE TABLE "users" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "firstName" TEXT NOT NULL,
-    "lastName" TEXT,
+    "provider" TEXT NOT NULL,
+    "providerIdToken" TEXT,
+    "providerAccessToken" TEXT,
+    "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP
 );
@@ -76,3 +78,6 @@ CREATE TABLE "workouts" (
     "completedAt" DATETIME,
     CONSTRAINT "workouts_weekId_fkey" FOREIGN KEY ("weekId") REFERENCES "weeks" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");

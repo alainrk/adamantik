@@ -63,13 +63,15 @@ model MesocycleTemplate {
 }
 
 model User {
-  id                Int                 @id @default(autoincrement())
-  firstName         String
-  lastName          String?
-  email             String
-  createdAt         DateTime?           @default(now())
-  mesocycle         Mesocycle[]
-  mesocycleTemplate MesocycleTemplate[]
+  id                  Int                 @id @default(autoincrement())
+  provider            String
+  providerIdToken     String?
+  providerAccessToken String?
+  name                String
+  email               String              @unique
+  createdAt           DateTime?           @default(now())
+  mesocycle           Mesocycle[]
+  mesocycleTemplate   MesocycleTemplate[]
 
   @@map("users")
 }

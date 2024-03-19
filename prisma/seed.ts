@@ -1,14 +1,7 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+// Ignore this file for TS
 
-import {
-  Mesocycle,
-  MesocycleTemplate,
-  User,
-  Exercise,
-  ExerciseInstance,
-  Week,
-  Workout,
-} from "../types";
+import { PrismaClient, Prisma } from "@prisma/client";
+const prisma = new PrismaClient();
 
 const MUSCLE_GROUP_CHEST = 1;
 const MUSCLE_GROUP_ABS = 2;
@@ -24,22 +17,22 @@ const MUSCLE_GROUP_TRICEPS = 11;
 const MUSCLE_GROUP_BICEPS = 12;
 const MUSCLE_GROUP_TRAPS = 13;
 
-const users: User[] = [
+const users = [
   {
     id: 1,
-    firstName: "John",
-    lastName: "Doe",
+    name: "John Doe",
+    provider: "google",
     email: "john.doe@example.com",
   },
   {
     id: 2,
-    firstName: "Jane",
-    lastName: "Smith",
+    name: "Jane Smith",
+    provider: "google",
     email: "jane.smith@example.com",
   },
 ];
 
-const exercises: Exercise[] = [
+const exercises = [
   {
     id: 1,
     muscleGroup: MUSCLE_GROUP_QUADS,
@@ -63,7 +56,7 @@ const exercises: Exercise[] = [
   },
 ];
 
-const mesocycleTemplates: MesocycleTemplate[] = [
+const mesocycleTemplates = [
   {
     id: 1,
     name: "Strength Training General",
@@ -98,7 +91,7 @@ const mesocycleTemplates: MesocycleTemplate[] = [
   },
 ];
 
-const mesocycles: Mesocycle[] = [
+const mesocycles = [
   {
     id: 1,
     userId: 1,
@@ -139,8 +132,8 @@ const mesocycles: Mesocycle[] = [
 
 // Define a function that given a list of objects, returns a list of objects
 // with the same structure but with an additional property.
-const weeks: Week[] = ((mesos: Mesocycle[]): Week[] => {
-  const weeks: Week[] = [];
+const weeks = ((mesos) => {
+  const weeks = [];
   let c = 0;
   for (const meso of mesos) {
     for (let i = 0; i < meso.numberOfWeeks; i++) {
@@ -159,8 +152,8 @@ const weeks: Week[] = ((mesos: Mesocycle[]): Week[] => {
   return weeks;
 })(mesocycles);
 
-const workouts: Workout[] = ((weeks: Week[]): Workout[] => {
-  const workouts: Workout[] = [];
+const workouts = ((weeks) => {
+  const workouts = [];
   let c = 0;
   for (const week of weeks) {
     // @ts-ignore-next-line
@@ -179,10 +172,8 @@ const workouts: Workout[] = ((weeks: Week[]): Workout[] => {
   return workouts;
 })(weeks);
 
-const exerciseInstances: ExerciseInstance[] = ((
-  workouts: Workout[]
-): ExerciseInstance[] => {
-  const exerciseInstances: ExerciseInstance[] = [];
+const exerciseInstances = ((workouts) => {
+  const exerciseInstances = [];
   let c = 0;
 
   // TODO: This will eventually be in the week (or at most workout) instead
@@ -218,8 +209,6 @@ const exerciseInstances: ExerciseInstance[] = ((
   }
   return exerciseInstances;
 })(workouts);
-
-const prisma = new PrismaClient();
 
 async function main() {
   console.log(`Start seeding ...`);

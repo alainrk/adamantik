@@ -9,11 +9,13 @@
     "_migrate": "npx prisma migrate dev --name XXXXXX",
     "dev": "tsx watch src/server.ts",
     "seed": "npx prisma migrate dev --name init",
-    "studio": "npx prisma studio"
+    "studio": "npx prisma studio",
+    "nuke": "rm prisma/dev.db; rm -rf prisma/migrations"
   },
   "dependencies": {
     "@fastify/oauth2": "^7.8.0",
     "@prisma/client": "5.11.0",
+    "axios": "^1.6.8",
     "dotenv": "^16.4.5",
     "fastify": "4.26.2",
     "fastify-plugin": "^4.5.1",
