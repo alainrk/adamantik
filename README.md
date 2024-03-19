@@ -24,3 +24,12 @@ npm run studio
 # Build the app
 npm run build
 ```
+
+## TODO:
+
+Non-exhaustive list of immediate next steps:
+
+- [x] Move authn stuff in their own plugin
+- [ ] Add authn middleware using implemented google sso
+- [ ] Protect routes with authn middleware
+- [ ] Protect routes based on user id - implement scoped access
