@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "Exercise" (
+CREATE TABLE "exercises" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "muscleGroup" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE "Exercise" (
 );
 
 -- CreateTable
-CREATE TABLE "ExerciseInstance" (
+CREATE TABLE "exercise_instances" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "relativeOrder" INTEGER NOT NULL,
     "exerciseId" INTEGER NOT NULL,
@@ -18,12 +18,12 @@ CREATE TABLE "ExerciseInstance" (
     "expectedRir" INTEGER NOT NULL,
     "feedback" TEXT NOT NULL,
     "sets" TEXT,
-    CONSTRAINT "ExerciseInstance_workoutId_fkey" FOREIGN KEY ("workoutId") REFERENCES "Workout" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
-    CONSTRAINT "ExerciseInstance_exerciseId_fkey" FOREIGN KEY ("exerciseId") REFERENCES "Exercise" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+    CONSTRAINT "exercise_instances_workoutId_fkey" FOREIGN KEY ("workoutId") REFERENCES "workouts" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT "exercise_instances_exerciseId_fkey" FOREIGN KEY ("exerciseId") REFERENCES "exercises" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- CreateTable
-CREATE TABLE "Mesocycle" (
+CREATE TABLE "mesocycles" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "userId" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
@@ -32,11 +32,11 @@ CREATE TABLE "Mesocycle" (
     "numberOfDays" INTEGER NOT NULL,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "template" TEXT NOT NULL,
-    CONSTRAINT "Mesocycle_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+    CONSTRAINT "mesocycles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- CreateTable
-CREATE TABLE "MesocycleTemplate" (
+CREATE TABLE "mesocycle_template" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
     "focus" TEXT NOT NULL,
@@ -44,11 +44,11 @@ CREATE TABLE "MesocycleTemplate" (
     "numberOfDays" INTEGER NOT NULL,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "template" TEXT NOT NULL,
-    CONSTRAINT "MesocycleTemplate_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+    CONSTRAINT "mesocycle_template_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- CreateTable
-CREATE TABLE "User" (
+CREATE TABLE "users" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT,
@@ -57,22 +57,22 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "Week" (
+CREATE TABLE "weeks" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "numberOfDays" INTEGER NOT NULL,
     "relativeOrder" INTEGER NOT NULL,
     "mesocycleId" INTEGER NOT NULL,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "completedAt" DATETIME,
-    CONSTRAINT "Week_mesocycleId_fkey" FOREIGN KEY ("mesocycleId") REFERENCES "Mesocycle" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+    CONSTRAINT "weeks_mesocycleId_fkey" FOREIGN KEY ("mesocycleId") REFERENCES "mesocycles" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- CreateTable
-CREATE TABLE "Workout" (
+CREATE TABLE "workouts" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "relativeOrder" INTEGER NOT NULL,
     "weekId" INTEGER NOT NULL,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "completedAt" DATETIME,
-    CONSTRAINT "Workout_weekId_fkey" FOREIGN KEY ("weekId") REFERENCES "Week" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+    CONSTRAINT "workouts_weekId_fkey" FOREIGN KEY ("weekId") REFERENCES "weeks" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
