@@ -1,8 +1,4 @@
 import { FastifyInstance, FastifyRequest } from "fastify";
-import { PrismaClient } from "@prisma/client";
-
-// TODO: Initialize globally in fastify (I suppose)
-const prisma = new PrismaClient();
 
 type UsersRequest = FastifyRequest<{
   Querystring: { cursor?: number; take?: number };
@@ -25,14 +21,14 @@ export default async function users(app: FastifyInstance) {
     // @ts-ignore
     if (!cursor) delete opts.cursor;
     // @ts-ignore
-    const users = await prisma.user.findMany(opts);
+    const users = await app.prisma.user.findMany(opts);
     const newCursor = users[users.length - 1]?.id;
-    return { users, newCursor };
+    return { users, cursor: newCursor };
   });
 
   app.get("/users/:id", async (req: UserRequest, res) => {
     const { id } = req.params;
-    return prisma.user.findUniqueOrThrow({
+    return await app.prisma.user.findUniqueOrThrow({
       where: { id: Number(id) },
     });
   });

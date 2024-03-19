@@ -1,4 +1,6 @@
 import fastify from "fastify";
+
+import prisma from "./plugins/prisma";
 import users from "./routes/users";
 
 const envToLogger = {
@@ -20,6 +22,7 @@ const app = fastify({
   logger: envToLogger["development"],
 });
 
+app.register(prisma);
 app.register(users);
 
 app.get("/status", async (req, res) => {
