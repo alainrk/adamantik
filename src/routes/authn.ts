@@ -1,5 +1,5 @@
-import { FastifyInstance, FastifyRequest } from "fastify";
-import axios from "axios";
+import { FastifyInstance } from "fastify";
+import axios, { Axios, AxiosError } from "axios";
 
 export default async function authn(app: FastifyInstance) {
   app.get("/login/google/callback", async function (request, reply) {
@@ -22,29 +22,16 @@ export default async function authn(app: FastifyInstance) {
       return;
     }
 
-    // TODO: Using findFirst but email should be unique as well and so using findUnique
-    const user = await app.prisma.user.findUnique({
+    await app.prisma.user.upsert({
       where: { email: providerData.email },
-    });
-
-    // New user registration
-    if (!user) {
-      await app.prisma.user.create({
-        data: {
-          email: providerData.email,
-          name: providerData.name,
-          providerIdToken: token.id_token || "",
-          // TODO: Not needed, remove
-          providerAccessToken: token.access_token,
-          provider: "google",
-        },
-      });
-    }
-
-    // Update user token
-    await app.prisma.user.update({
-      where: { email: providerData.email },
-      data: {
+      update: {
+        providerIdToken: token.id_token || "",
+        providerAccessToken: token.access_token,
+        provider: "google",
+      },
+      create: {
+        email: providerData.email,
+        name: providerData.name,
         providerIdToken: token.id_token || "",
         providerAccessToken: token.access_token,
         provider: "google",
@@ -55,5 +42,49 @@ export default async function authn(app: FastifyInstance) {
     // const { token: newToken } = await this.getNewAccessTokenUsingRefreshToken(token)
 
     reply.send({ access_token: token.access_token });
+  });
+
+  app.get("/login/test", async function (request, reply) {
+    // Get bearer token from request
+    const access_token = request.headers.authorization?.replace("Bearer ", "");
+    if (!access_token) {
+      reply
+        .code(401)
+        .send({
+          message: "Unauthorized, missing access token in the request.",
+        });
+      return;
+    }
+
+    // Verify with the provider
+    let providerData = null;
+    try {
+      const res = await axios.get(
+        "https://www.googleapis.com/oauth2/v1/userinfo",
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+      providerData = res.data;
+    } catch (err) {
+      app.log.error(err);
+      if (axios.isAxiosError(err)) {
+        if (err?.response?.status === 401) {
+          reply.code(401).send({ message: "Unauthorized" });
+          return;
+        }
+        reply.code(500).send({ message: "Error authenticating user" });
+      }
+    }
+
+    // Decorating request with user data taken from the database
+    const user = await app.prisma.user.findUnique({
+      where: { email: providerData.email },
+      select: { id: true, name: true, email: true },
+    });
+
+    reply.send({ test: "OK", user });
   });
 }
