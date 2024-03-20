@@ -1,8 +1,5 @@
 import fp from "fastify-plugin";
 import { FastifyInstance, FastifyPluginCallback } from "fastify";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 interface Config {
   env: string;
@@ -24,7 +21,7 @@ declare module "fastify" {
 
 const config: FastifyPluginCallback = (fastify: FastifyInstance, _, done) => {
   const config: Config = {
-    env: process.env.environment || "development",
+    env: process.env.ENVIRONMENT || "development",
     port: parseInt(process.env.PORT || "3000", 10),
     logLevel: process.env.LOG_LEVEL || "trace",
     auth: {
