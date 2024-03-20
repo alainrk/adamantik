@@ -8,6 +8,7 @@ import prisma from "./plugins/prisma";
 import healthcheck from "./routes/healthcheck";
 import users from "./routes/users";
 import authn from "./routes/authn";
+import authenticationMiddlware from "./middlewares/authn";
 
 dotenv.config();
 
@@ -56,10 +57,16 @@ async function main() {
     callbackUri: "http://localhost:3000/login/google/callback",
   });
 
-  // TODO: Register domain routes in a single place
   app.register(healthcheck);
-  app.register(users);
   app.register(authn);
+
+  // TODO: Is there a better way to do this?
+  // Authentication protected routes
+  app.register((app, _, done) => {
+    app.addHook("preHandler", authenticationMiddlware(app));
+    app.register(users);
+    done();
+  });
 
   app.listen({ port: 3000 }, (err) => {
     if (err) {
