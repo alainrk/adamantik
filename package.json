@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "dev:orig": "ts-node src/server.ts",
+    "dev:orig": "ts-node src/app.ts",
     "build": "tsc",
-    "_dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node-dev src/server.ts'",
+    "_dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node-dev src/app.ts'",
     "_migrate": "npx prisma migrate dev --name XXXXXX",
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch src/app.ts",
     "seed": "npx prisma migrate dev --name init",
     "studio": "npx prisma studio",
+    "test": "borp",
     "nuke": "rm prisma/dev.db; rm -rf prisma/migrations"
   },
   "dependencies": {
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@types/node": "20.11.28",
+    "borp": "^0.10.0",
     "prisma": "5.11.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",

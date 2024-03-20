@@ -1,25 +1,24 @@
-import fastify from "fastify";
+import fastify, { FastifyInstance } from "fastify";
 import { OAuth2Namespace } from "@fastify/oauth2";
 import oauthPlugin from "@fastify/oauth2";
-import dotenv from "dotenv";
 
-import config from "./plugins/config";
+// import configPlugin, { Config } from "./plugins/config";
 import prisma from "./plugins/prisma";
+import { Config } from "./config";
 import healthcheck from "./routes/healthcheck";
 import users from "./routes/users";
 import authn from "./routes/authn";
 import authenticationMiddlware from "./middlewares/authn";
 
-dotenv.config();
-
 declare module "fastify" {
   interface FastifyInstance {
     googleOAuth2: OAuth2Namespace;
+    config: Config;
   }
 }
 
 const envToLogger = (env: string) => {
-  if (env === "development") {
+  if (["development", "test"].includes(env)) {
     return {
       transport: {
         target: "pino-pretty",
@@ -33,12 +32,15 @@ const envToLogger = (env: string) => {
   return true;
 };
 
-async function main() {
+export default async function buildServer(
+  config: Config
+): Promise<FastifyInstance> {
   const app = fastify({
-    logger: envToLogger(process.env.ENVIRONMENT || "development"),
+    logger: envToLogger(config.env),
   });
 
-  await app.register(config);
+  // await app.register(configPlugin);
+  await app.decorate("config", config);
   await app.register(prisma);
 
   app.register(oauthPlugin, {
@@ -46,8 +48,8 @@ async function main() {
     scope: ["profile", "email"],
     credentials: {
       client: {
-        id: app.config?.auth?.google?.clientId,
-        secret: app.config?.auth?.google?.clientSecret,
+        id: config?.auth?.google?.clientId,
+        secret: config?.auth?.google?.clientSecret,
       },
       auth: oauthPlugin.GOOGLE_CONFIGURATION,
     },
@@ -68,13 +70,5 @@ async function main() {
     done();
   });
 
-  app.listen({ port: 3000 }, (err) => {
-    if (err) {
-      console.error(err);
-      process.exit(1);
-    }
-    console.log(`🚀 Server ready at: http://localhost:3000`);
-  });
+  return app;
 }
-
-main();
