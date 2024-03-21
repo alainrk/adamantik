@@ -30,6 +30,6 @@ npm run build
 Non-exhaustive list of immediate next steps:
 
 - [x] Move authn stuff in their own plugin
-- [ ] Add authn middleware using implemented google sso
-- [ ] Protect routes with authn middleware
+- [x] Add authn middleware using implemented google sso
+- [x] Protect routes with authn middleware
 - [ ] Protect routes based on user id - implement scoped access
