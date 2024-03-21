@@ -19,7 +19,6 @@ const prisma: FastifyPluginCallback = (fastify: FastifyInstance, _, done) => {
   done();
 };
 
-// export default prisma;
 // Wrapping a plugin function with fastify-plugin exposes the decorators
 // and hooks, declared inside the plugin to the parent scope.
 // Otherwise, the decorators and hooks would only be available within the plugin scope.
