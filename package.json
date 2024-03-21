@@ -11,6 +11,7 @@
     "seed": "npx prisma migrate dev --name init",
     "studio": "npx prisma studio",
     "test": "borp",
+    "test:watch": "borp --watch",
     "nuke": "rm prisma/dev.db; rm -rf prisma/migrations"
   },
   "dependencies": {

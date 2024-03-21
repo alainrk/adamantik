@@ -1,6 +1,7 @@
 export interface Config {
   env: string;
   port: number;
+  host: string;
   logLevel: string;
   auth: {
     google: {
@@ -14,6 +15,7 @@ export const getConfig = (): Config => {
   return {
     env: process.env.ENVIRONMENT || "development",
     port: parseInt(process.env.PORT || "3000", 10),
+    host: process.env.HOST || "localhost",
     logLevel: process.env.LOG_LEVEL || "trace",
     auth: {
       google: {
