@@ -12,18 +12,9 @@ export default function authenticationMiddleware(app: FastifyInstance) {
       return;
     }
 
-    // Verify with the provider
     let providerData = null;
     try {
-      const res = await axios.get(
-        "https://www.googleapis.com/oauth2/v1/userinfo",
-        {
-          headers: {
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
-      providerData = res.data;
+      providerData = await app.idp.verifyUser(access_token);
     } catch (err) {
       app.log.error(err);
       if (axios.isAxiosError(err)) {

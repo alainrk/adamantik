@@ -8,12 +8,12 @@ declare module "fastify" {
   }
 }
 
-const prisma: FastifyPluginCallback = (fastify: FastifyInstance, _, done) => {
+const prisma: FastifyPluginCallback = (app: FastifyInstance, _, done) => {
   // Initialize Prisma client
   const prisma = new PrismaClient();
 
   // Expose Prisma client within the Fastify object
-  fastify.decorate("prisma", prisma);
+  app.decorate("prisma", prisma);
 
   // Call done to signal that plugin registration is complete
   done();

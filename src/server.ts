@@ -1,6 +1,5 @@
 import fastify, { FastifyInstance } from "fastify";
-import { OAuth2Namespace } from "@fastify/oauth2";
-import oauthPlugin from "@fastify/oauth2";
+import oauthPlugin, { OAuth2Namespace } from "@fastify/oauth2";
 
 // import configPlugin, { Config } from "./plugins/config";
 import prisma from "./plugins/prisma";
@@ -9,6 +8,7 @@ import healthcheck from "./routes/healthcheck";
 import users from "./routes/users";
 import authn from "./routes/authn";
 import authenticationMiddlware from "./middlewares/authn";
+import idp from "./plugins/idp";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -39,24 +39,26 @@ export default async function buildServer(
     logger: envToLogger(config.env),
   });
 
-  // await app.register(configPlugin);
   await app.decorate("config", config);
+  await app.register(idp);
   await app.register(prisma);
 
+  // TODO: No idea why TS is event complaining here
+  // I'm following the docs: https://github.com/fastify/fastify-oauth2?tab=readme-ov-file#usage
   app.register(oauthPlugin, {
     name: "googleOAuth2",
     scope: ["profile", "email"],
     credentials: {
       client: {
-        id: config?.auth?.google?.clientId,
-        secret: config?.auth?.google?.clientSecret,
+        id: config?.auth?.clientId,
+        secret: config?.auth?.clientSecret,
       },
       auth: oauthPlugin.GOOGLE_CONFIGURATION,
     },
     // Register a fastify url to start the redirect flow
     startRedirectPath: "/login/google",
     // Google will redirect here after the user login
-    callbackUri: "http://localhost:3000/login/google/callback",
+    callbackUri: `http://${app.config.host}:${app.config.port}/login/google/callback`,
   });
 
   app.register(healthcheck);

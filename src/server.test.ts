@@ -9,7 +9,7 @@ dotenv.config({
   path: ".env.test",
 });
 
-describe("Server initialization", () => {
+describe("Server", () => {
   let app: FastifyInstance;
 
   beforeEach(async () => {
@@ -19,7 +19,7 @@ describe("Server initialization", () => {
     app.close();
   });
 
-  it("should start the server", async () => {
+  it("should return correct status", async () => {
     const response = await app.inject({
       method: "GET",
       url: "/status",
@@ -27,5 +27,14 @@ describe("Server initialization", () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.json()).toEqual({ status: "OK", env: app.config.env });
+  });
+
+  it("should fail for not authenticated user", async () => {
+    const response = await app.inject({
+      method: "GET",
+      url: "/users",
+    });
+
+    expect(response.statusCode).toBe(401);
   });
 });

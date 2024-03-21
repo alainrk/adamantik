@@ -8,15 +8,7 @@ export default async function authn(app: FastifyInstance) {
 
     let providerData = null;
     try {
-      const res = await axios.get(
-        "https://www.googleapis.com/oauth2/v1/userinfo",
-        {
-          headers: {
-            Authorization: `Bearer ${token.access_token}`,
-          },
-        }
-      );
-      providerData = res.data;
+      providerData = await app.idp.verifyUser(token.access_token);
     } catch (err) {
       reply.code(500).send({ message: "Something went wrong with the token" });
       return;
