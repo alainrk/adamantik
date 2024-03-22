@@ -1,12 +1,14 @@
+import dotenv from "dotenv";
+
 import buildServer from "./server";
 import { getConfig } from "./config";
-import dotenv from "dotenv";
+import prisma from "./libs/prisma";
 
 dotenv.config();
 
 async function main() {
   const config = getConfig();
-  const app = await buildServer(config);
+  const app = await buildServer(config, prisma);
 
   app.listen({ host: config.host, port: config.port }, (err) => {
     if (err) {
