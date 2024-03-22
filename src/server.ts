@@ -1,8 +1,4 @@
 import fastify, { FastifyInstance } from "fastify";
-import oauthPlugin, {
-  OAuth2Namespace,
-  FastifyOAuth2Options,
-} from "@fastify/oauth2";
 
 // import configPlugin, { Config } from "./plugins/config";
 import prisma from "./plugins/prisma";
@@ -15,7 +11,6 @@ import idp from "./plugins/idp";
 
 declare module "fastify" {
   interface FastifyInstance {
-    googleOAuth2: OAuth2Namespace;
     config: Config;
   }
 }
@@ -43,27 +38,10 @@ export default async function buildServer(
   });
 
   await app.decorate("config", config);
-  await app.register(idp);
   await app.register(prisma);
+  // Setup IDP funcionalities and OAuth2 plugin if config requires it
+  await app.register(idp);
 
-  // TODO: No idea why TS is event complaining here
-  // I'm following the docs: https://github.com/fastify/fastify-oauth2?tab=readme-ov-file#usage
-  const oauthOpts: FastifyOAuth2Options = {
-    name: "googleOAuth2",
-    scope: ["profile", "email"],
-    credentials: {
-      client: {
-        id: config?.auth?.clientId || "",
-        secret: config?.auth?.clientSecret || "",
-      },
-      auth: oauthPlugin.GOOGLE_CONFIGURATION,
-    },
-    // Register a fastify url to start the redirect flow
-    startRedirectPath: "/login/google",
-    // Google will redirect here after the user login
-    callbackUri: `http://${app.config.host}:${app.config.port}/login/google/callback`,
-  };
-  app.register(oauthPlugin, oauthOpts);
   app.register(healthcheck);
   app.register(authn);
 
