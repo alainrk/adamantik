@@ -47,6 +47,8 @@ Non-exhaustive list of immediate next steps:
 - [x] Move authn stuff in their own plugin
 - [x] Add authn middleware using implemented google sso
 - [x] Protect routes with authn middleware
-- [ ] Setup auth middleware and IDP to allow injection and testing
+- [x] Setup auth middleware and IDP to allow injection and testing
+- [x] Setup CI/CD
 - [ ] Protect routes based on user id - implement scoped access
-- [ ] Setup CI/CD
+- [ ] Add basic tests of authn flow
+- [ ] Create first useful CRUD routes
