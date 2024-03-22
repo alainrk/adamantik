@@ -2,6 +2,7 @@
 import { beforeEach, it, describe, afterEach, expect, vi } from "vitest";
 import { FastifyInstance } from "fastify";
 import dotenv from "dotenv";
+
 import buildServer from "./server";
 import { getConfig } from "./config";
 import prisma from "./libs/__mocks__/prisma";
@@ -16,9 +17,9 @@ describe("Server", () => {
   let app: FastifyInstance;
 
   beforeEach(async () => {
-    prisma.user.findFirst.mockResolvedValueOnce({
+    prisma.user.findFirst.mockResolvedValue({
       id: 1,
-      name: "Test",
+      name: "Test One",
       email: "asd@qwerty.com",
       provider: "google",
       providerIdToken: "123",
