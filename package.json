@@ -10,7 +10,7 @@
     "dev": "tsx watch src/app.ts",
     "seed": "npx prisma migrate dev --name init",
     "studio": "npx prisma studio",
-    "test": "vitest",
+    "test": "vitest --run",
     "test:watch": "vitest --watch",
     "nuke": "rm prisma/dev.db; rm -rf prisma/migrations"
   },
