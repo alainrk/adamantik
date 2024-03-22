@@ -2,8 +2,7 @@ import { FastifyInstance } from "fastify";
 
 export default async function authn(app: FastifyInstance) {
   app.get("/login/google/callback", async function (request, reply) {
-    const { token } =
-      await app.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request);
+    const { token } = await app.idp.getAccessTokenFromRequest(app, request);
 
     let providerData = null;
     try {

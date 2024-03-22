@@ -1,10 +1,15 @@
 import axios from "axios";
 
 import fp from "fastify-plugin";
-import { FastifyInstance, FastifyPluginCallback } from "fastify";
+import {
+  FastifyInstance,
+  FastifyPluginCallback,
+  FastifyRequest,
+} from "fastify";
 import oauthPlugin, {
   OAuth2Namespace,
   FastifyOAuth2Options,
+  OAuth2Token,
 } from "@fastify/oauth2";
 
 declare module "fastify" {
@@ -20,12 +25,17 @@ class IDP {
   provider: string;
   options: any;
   verifyUser: (accessToken: string) => Promise<any>;
+  getAccessTokenFromRequest: (
+    app: FastifyInstance,
+    request: FastifyRequest
+  ) => Promise<OAuth2Token>;
 
   constructor(provider: string = "google") {
     this.provider = provider;
     switch (provider) {
       case "google":
         this.verifyUser = this.verifyUserGoogle;
+        this.getAccessTokenFromRequest = this.getAccessTokenFromRequestGoogle;
         break;
       default:
         throw new Error("Unsupported IDP");
@@ -42,6 +52,13 @@ class IDP {
       }
     );
     return res.data;
+  }
+
+  private async getAccessTokenFromRequestGoogle(
+    app: FastifyInstance,
+    request: FastifyRequest
+  ): Promise<OAuth2Token> {
+    return app.googleOAuth2.getAccessTokenFromAuthorizationCodeFlow(request);
   }
 }
 
