@@ -1,5 +1,8 @@
 import fastify, { FastifyInstance } from "fastify";
-import oauthPlugin, { OAuth2Namespace } from "@fastify/oauth2";
+import oauthPlugin, {
+  OAuth2Namespace,
+  FastifyOAuth2Options,
+} from "@fastify/oauth2";
 
 // import configPlugin, { Config } from "./plugins/config";
 import prisma from "./plugins/prisma";
@@ -45,13 +48,13 @@ export default async function buildServer(
 
   // TODO: No idea why TS is event complaining here
   // I'm following the docs: https://github.com/fastify/fastify-oauth2?tab=readme-ov-file#usage
-  app.register(oauthPlugin, {
+  const oauthOpts: FastifyOAuth2Options = {
     name: "googleOAuth2",
     scope: ["profile", "email"],
     credentials: {
       client: {
-        id: config?.auth?.clientId,
-        secret: config?.auth?.clientSecret,
+        id: config?.auth?.clientId || "",
+        secret: config?.auth?.clientSecret || "",
       },
       auth: oauthPlugin.GOOGLE_CONFIGURATION,
     },
@@ -59,8 +62,8 @@ export default async function buildServer(
     startRedirectPath: "/login/google",
     // Google will redirect here after the user login
     callbackUri: `http://${app.config.host}:${app.config.port}/login/google/callback`,
-  });
-
+  };
+  app.register(oauthPlugin, oauthOpts);
   app.register(healthcheck);
   app.register(authn);
 

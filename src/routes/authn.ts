@@ -1,5 +1,4 @@
 import { FastifyInstance } from "fastify";
-import axios from "axios";
 
 export default async function authn(app: FastifyInstance) {
   app.get("/login/google/callback", async function (request, reply) {
