@@ -28,6 +28,7 @@ export default async function authn(app: FastifyInstance) {
       },
     });
 
+    // TODO: Move this to IDP then
     // if later you need to refresh the token you can use
     // const { token: newToken } = await this.getNewAccessTokenUsingRefreshToken(token)
 
