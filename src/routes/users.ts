@@ -26,13 +26,25 @@ export default async function users(app: FastifyInstance) {
       opts.cursor = { id: Number(cursor) };
       opts.skip = !!cursor ? 1 : 0;
     }
+
+    // TODO: Add RBAC check if admin to allow everything
+    opts.where = { id: req.user.id };
+
     const users = await app.prisma.user.findMany(opts);
     const newCursor = users[users.length - 1]?.id;
     return { users, cursor: newCursor };
   });
 
   app.get("/users/:id", async (req: UserRequest, res) => {
-    const { id } = req.params;
+    // TODO: Add one of those fancy things for validation/casting
+    let id = Number(req.params.id);
+
+    // Prevent other users loading other's data
+    if (req.user?.id !== Number(id)) {
+      res.code(401).send({ message: "Unauthorized" });
+      return;
+    }
+
     const select: Prisma.UserSelect = {
       name: true,
       email: true,

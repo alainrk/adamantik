@@ -1,7 +1,19 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import axios from "axios";
 
+declare module "fastify" {
+  interface FastifyRequest {
+    user: {
+      id: number;
+      email: string;
+    };
+  }
+}
+
 export default function authenticationMiddleware(app: FastifyInstance) {
+  // Decorate request with user data that will be set by the middleware
+  app.decorateRequest("user", { id: 0, email: "" });
+
   return async (request: FastifyRequest, reply: FastifyReply) => {
     // Get bearer token from request
     const access_token = request.headers.authorization?.replace("Bearer ", "");
@@ -31,6 +43,15 @@ export default function authenticationMiddleware(app: FastifyInstance) {
       where: { email: providerData.email },
       select: { id: true, name: true, email: true },
     });
+
+    if (!user) {
+      reply.code(401).send({ message: "Unauthorized" });
+      return;
+    }
+
+    // Decorate request with user data
+    request.user.id = user.id;
+    request.user.email = user.email;
 
     app.log.info({ user });
   };
