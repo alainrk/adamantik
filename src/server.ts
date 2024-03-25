@@ -1,17 +1,17 @@
 import fastify, { FastifyInstance } from "fastify";
 
-// import configPlugin, { Config } from "./plugins/config";
-import prisma from "./plugins/prisma";
 import { Config } from "./config";
 import healthcheck from "./routes/healthcheck";
 import users from "./routes/users";
 import authn from "./routes/authn";
 import authenticationMiddlware from "./middlewares/authn";
 import idp from "./plugins/idp";
+import { PrismaClient } from "./libs/prisma";
 
 declare module "fastify" {
   interface FastifyInstance {
     config: Config;
+    prisma: PrismaClient;
   }
 }
 
@@ -31,14 +31,17 @@ const envToLogger = (env: string) => {
 };
 
 export default async function buildServer(
-  config: Config
+  config: Config,
+  prisma: PrismaClient
 ): Promise<FastifyInstance> {
   const app = fastify({
     logger: envToLogger(config.env),
   });
 
   await app.decorate("config", config);
-  await app.register(prisma);
+  // TODO: Try to fix this in testing env, prisma doesn't get decorated for some reason.
+  await app.decorate("prisma", prisma);
+
   // Setup IDP funcionalities and OAuth2 plugin if config requires it
   await app.register(idp);
 
