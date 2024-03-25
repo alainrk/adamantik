@@ -39,10 +39,8 @@ export default async function buildServer(
   });
 
   await app.decorate("config", config);
-  const user = await prisma.user.findFirst();
-  console.log("User", user);
+  // TODO: Try to fix this in testing env, prisma doesn't get decorated for some reason.
   await app.decorate("prisma", prisma);
-  console.log("Decorating prisma", !!app.prisma, !!prisma);
 
   // Setup IDP funcionalities and OAuth2 plugin if config requires it
   await app.register(idp);
