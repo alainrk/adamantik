@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import axios from "axios";
+import jwtoken, { JwtPayload } from "jsonwebtoken";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -10,49 +10,41 @@ declare module "fastify" {
   }
 }
 
+declare module "jsonwebtoken" {
+  interface JwtPayload {
+    id: number;
+    email: string;
+  }
+}
+
 export default function authenticationMiddleware(app: FastifyInstance) {
-  // Decorate request with user data that will be set by the middleware
-  app.decorateRequest("user", { id: 0, email: "" });
+  // Set default user data, it doesn't use decorate request because of FSTDEP006
+  app.addHook("onRequest", async (req, reply) => {
+    req.user = { id: 0, email: "" };
+  });
 
   return async (request: FastifyRequest, reply: FastifyReply) => {
     // Get bearer token from request
-    const access_token = request.headers.authorization?.replace("Bearer ", "");
-    if (!access_token) {
+    const token = request.headers.authorization?.replace("Bearer ", "");
+    if (!token) {
       reply.code(401).send({
         message: "Unauthorized, missing access token in the request.",
       });
       return;
     }
 
-    let providerData = null;
+    let decodedToken: JwtPayload | null = null;
     try {
-      providerData = await app.idp.verifyUser(access_token);
-    } catch (err) {
-      app.log.error(err);
-      if (axios.isAxiosError(err)) {
-        if (err?.response?.status === 401) {
-          reply.code(401).send({ message: "Unauthorized" });
-          return;
-        }
-        reply.code(500).send({ message: "Error authenticating user" });
+      decodedToken = jwtoken.verify(token, app.config.jwt.secret) as JwtPayload;
+      if (!decodedToken) {
+        throw new Error("Invalid token");
       }
-    }
-
-    //  TODO: Decorate request with user data taken from the database if necessary
-    const user = await app.prisma.user.findUnique({
-      where: { email: providerData.email },
-      select: { id: true, name: true, email: true },
-    });
-
-    if (!user) {
+    } catch (err) {
       reply.code(401).send({ message: "Unauthorized" });
-      return;
     }
 
     // Decorate request with user data
-    request.user.id = user.id;
-    request.user.email = user.email;
-
-    app.log.info({ user });
+    request.user.id = decodedToken?.id || 0;
+    request.user.email = decodedToken?.email || "";
   };
 }

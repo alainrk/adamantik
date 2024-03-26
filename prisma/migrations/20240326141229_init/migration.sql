@@ -51,8 +51,6 @@ CREATE TABLE "mesocycle_template" (
 CREATE TABLE "users" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "provider" TEXT NOT NULL,
-    "providerIdToken" TEXT,
-    "providerAccessToken" TEXT,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP

@@ -1,4 +1,5 @@
 import { FastifyInstance } from "fastify";
+import jwtoken from "jsonwebtoken";
 
 export default async function authn(app: FastifyInstance) {
   app.get("/login/google/callback", async function (request, reply) {
@@ -12,26 +13,25 @@ export default async function authn(app: FastifyInstance) {
       return;
     }
 
-    await app.prisma.user.upsert({
+    const user = await app.prisma.user.upsert({
       where: { email: providerData.email },
       update: {
-        providerIdToken: token.id_token || "",
-        providerAccessToken: token.access_token,
         provider: "google",
       },
       create: {
         email: providerData.email,
         name: providerData.name,
-        providerIdToken: token.id_token || "",
-        providerAccessToken: token.access_token,
         provider: "google",
       },
     });
 
-    // TODO: Move this to IDP then
-    // if later you need to refresh the token you can use
-    // const { token: newToken } = await this.getNewAccessTokenUsingRefreshToken(token)
+    // Create JWT token
+    const jwt = jwtoken.sign(
+      { id: user.id, email: user.email },
+      app.config.jwt.secret,
+      { expiresIn: app.config.jwt.expiration }
+    );
 
-    reply.send({ access_token: token.access_token });
+    reply.send({ token: jwt });
   });
 }
