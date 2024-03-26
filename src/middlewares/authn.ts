@@ -1,6 +1,5 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import jwtoken, { JwtPayload } from "jsonwebtoken";
-import { DEFAULT_CIPHERS } from "tls";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -13,6 +12,7 @@ declare module "fastify" {
 
 declare module "jsonwebtoken" {
   interface JwtPayload {
+    id: number;
     email: string;
   }
 }
@@ -41,21 +41,8 @@ export default function authenticationMiddleware(app: FastifyInstance) {
       reply.code(401).send({ message: "Unauthorized" });
     }
 
-    //  TODO: Decorate request with user data taken from the database if necessary
-    const user = await app.prisma.user.findUnique({
-      where: { email: decodedToken?.email },
-      select: { id: true, name: true, email: true },
-    });
-
-    if (!user) {
-      reply.code(401).send({ message: "Unauthorized" });
-      return;
-    }
-
     // Decorate request with user data
-    request.user.id = user.id;
-    request.user.email = user.email;
-
-    app.log.info({ user });
+    request.user.id = decodedToken?.id || 0;
+    request.user.email = decodedToken?.email || "";
   };
 }

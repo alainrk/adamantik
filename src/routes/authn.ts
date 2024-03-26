@@ -13,14 +13,7 @@ export default async function authn(app: FastifyInstance) {
       return;
     }
 
-    // Create JWT token
-    const jwt = jwtoken.sign(
-      { email: providerData.email },
-      app.config.jwt.secret,
-      { expiresIn: app.config.jwt.expiration }
-    );
-
-    await app.prisma.user.upsert({
+    const user = await app.prisma.user.upsert({
       where: { email: providerData.email },
       update: {
         provider: "google",
@@ -31,6 +24,13 @@ export default async function authn(app: FastifyInstance) {
         provider: "google",
       },
     });
+
+    // Create JWT token
+    const jwt = jwtoken.sign(
+      { id: user.id, email: user.email },
+      app.config.jwt.secret,
+      { expiresIn: app.config.jwt.expiration }
+    );
 
     reply.send({ token: jwt });
   });
