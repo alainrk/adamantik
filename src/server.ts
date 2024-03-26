@@ -7,6 +7,7 @@ import authn from "./routes/authn";
 import authenticationMiddlware from "./middlewares/authn";
 import idp from "./plugins/idp";
 import { PrismaClient } from "./libs/prisma";
+import workouts from "./routes/workouts";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -53,6 +54,7 @@ export default async function buildServer(
   app.register((app, _, done) => {
     app.addHook("preHandler", authenticationMiddlware(app));
     app.register(users);
+    app.register(workouts);
     done();
   });
 
