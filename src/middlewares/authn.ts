@@ -33,7 +33,7 @@ export default function authenticationMiddleware(app: FastifyInstance) {
 
     let decodedToken: JwtPayload | null = null;
     try {
-      decodedToken = jwtoken.verify(token, app.config.jwtSecret) as JwtPayload;
+      decodedToken = jwtoken.verify(token, app.config.jwt.secret) as JwtPayload;
       if (!decodedToken) {
         throw new Error("Invalid token");
       }
@@ -41,6 +41,7 @@ export default function authenticationMiddleware(app: FastifyInstance) {
       reply.code(401).send({ message: "Unauthorized" });
     }
 
+    //  TODO: Decorate request with user data taken from the database if necessary
     const user = await app.prisma.user.findUnique({
       where: { email: decodedToken?.email },
       select: { id: true, name: true, email: true },

@@ -16,7 +16,8 @@ export default async function authn(app: FastifyInstance) {
     // Create JWT token
     const jwt = jwtoken.sign(
       { email: providerData.email },
-      app.config.jwtSecret
+      app.config.jwt.secret,
+      { expiresIn: app.config.jwt.expiration }
     );
 
     await app.prisma.user.upsert({

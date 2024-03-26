@@ -3,7 +3,10 @@ export interface Config {
   port: number;
   host: string;
   logLevel: string;
-  jwtSecret: string;
+  jwt: {
+    secret: string;
+    expiration: string;
+  };
   auth?: {
     provider: string;
     clientId: string;
@@ -17,7 +20,10 @@ export const getConfig = (): Config => {
     port: parseInt(process.env.PORT || "3000", 10),
     host: process.env.HOST || "localhost",
     logLevel: process.env.LOG_LEVEL || "trace",
-    jwtSecret: process.env.JWT_SECRET || "",
+    jwt: {
+      secret: process.env.JWT_SECRET || "",
+      expiration: process.env.JWT_EXPIRATION || "1d",
+    },
   };
 
   const provider = process.env.AUTH_PROVIDER || "google";
