@@ -143,6 +143,7 @@ const weeks = ((mesos) => {
         _template: JSON.parse(meso.template), // Just to then internally keep it for convenience later
         numberOfDays: meso.numberOfDays,
         id: c,
+        userId: meso.userId,
         relativeOrder: i,
         mesocycleId: meso.id || 0,
         completedAt: null,
@@ -163,6 +164,7 @@ const workouts = ((weeks) => {
         // @ts-ignore-next-line
         _template: week._template,
         id: c,
+        userId: week.userId,
         relativeOrder: i,
         weekId: week.id || 0,
         completedAt: null,

@@ -1,16 +1,16 @@
 import { FastifyInstance, FastifyRequest } from "fastify";
 import { Prisma } from "@prisma/client";
 
-type UsersRequest = FastifyRequest<{
+type GetUsersRequest = FastifyRequest<{
   Querystring: { cursor?: number; take?: number };
 }>;
 
-type UserRequest = FastifyRequest<{
+type GetUserRequest = FastifyRequest<{
   Params: { id: number };
 }>;
 
 export default async function users(app: FastifyInstance) {
-  app.get("/users", async (req: UsersRequest, res) => {
+  app.get("/users", async (req: GetUsersRequest, res) => {
     const { cursor, take } = req.query;
     const select: Prisma.UserSelect = {
       name: true,
@@ -35,7 +35,7 @@ export default async function users(app: FastifyInstance) {
     return { users, cursor: newCursor };
   });
 
-  app.get("/users/:id", async (req: UserRequest, res) => {
+  app.get("/users/:id", async (req: GetUserRequest, res) => {
     // TODO: Add one of those fancy things for validation/casting
     let id = Number(req.params.id);
 

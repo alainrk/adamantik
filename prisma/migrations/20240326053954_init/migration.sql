@@ -64,9 +64,11 @@ CREATE TABLE "weeks" (
     "numberOfDays" INTEGER NOT NULL,
     "relativeOrder" INTEGER NOT NULL,
     "mesocycleId" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "completedAt" DATETIME,
-    CONSTRAINT "weeks_mesocycleId_fkey" FOREIGN KEY ("mesocycleId") REFERENCES "mesocycles" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+    CONSTRAINT "weeks_mesocycleId_fkey" FOREIGN KEY ("mesocycleId") REFERENCES "mesocycles" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT "weeks_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- CreateTable
@@ -74,9 +76,11 @@ CREATE TABLE "workouts" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "relativeOrder" INTEGER NOT NULL,
     "weekId" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "completedAt" DATETIME,
-    CONSTRAINT "workouts_weekId_fkey" FOREIGN KEY ("weekId") REFERENCES "weeks" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+    CONSTRAINT "workouts_weekId_fkey" FOREIGN KEY ("weekId") REFERENCES "weeks" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
+    CONSTRAINT "workouts_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 -- CreateIndex

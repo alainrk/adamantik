@@ -72,6 +72,8 @@ model User {
   createdAt           DateTime?           @default(now())
   mesocycle           Mesocycle[]
   mesocycleTemplate   MesocycleTemplate[]
+  Workout             Workout[]
+  Week                Week[]
 
   @@map("users")
 }
@@ -81,9 +83,11 @@ model Week {
   numberOfDays  Int
   relativeOrder Int
   mesocycleId   Int
+  userId        Int
   createdAt     DateTime? @default(now())
   completedAt   DateTime?
   mesocycle     Mesocycle @relation(fields: [mesocycleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user          User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   workout       Workout[]
 
   @@map("weeks")
@@ -93,10 +97,12 @@ model Workout {
   id               Int                @id @default(autoincrement())
   relativeOrder    Int
   weekId           Int
+  userId           Int
   createdAt        DateTime?          @default(now())
   completedAt      DateTime?
   exerciseInstance ExerciseInstance[]
   week             Week               @relation(fields: [weekId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user             User               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("workouts")
 }
