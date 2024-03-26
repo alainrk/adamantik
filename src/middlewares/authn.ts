@@ -18,8 +18,10 @@ declare module "jsonwebtoken" {
 }
 
 export default function authenticationMiddleware(app: FastifyInstance) {
-  // Decorate request with user data that will be set by the middleware
-  app.decorateRequest("user", { id: 0, email: "" });
+  // Set default user data, it doesn't use decorate request because of FSTDEP006
+  app.addHook("onRequest", async (req, reply) => {
+    req.user = { id: 0, email: "" };
+  });
 
   return async (request: FastifyRequest, reply: FastifyReply) => {
     // Get bearer token from request

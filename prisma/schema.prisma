@@ -7,16 +7,6 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model Sessions {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  token     String
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
-  @@map("sessions")
-}
-
 model Exercise {
   id               Int                @id @default(autoincrement())
   muscleGroup      Int
@@ -82,7 +72,6 @@ model User {
   mesocycleTemplate MesocycleTemplate[]
   Workout           Workout[]
   Week              Week[]
-  Sessions          Sessions[]
 
   @@map("users")
 }
