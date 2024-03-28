@@ -1,0 +1,8 @@
+erDiagram
+    USER ||--o{ MESOCYCLETEMPLATE : "can have"
+    MESOCYCLETEMPLATE ||--o{ MESOCYCLE : "is template for"
+    USER ||--o{ MESOCYCLE : "has"
+    MESOCYCLE ||--o{ WEEK : "contains"
+    WEEK ||--o{ WORKOUT : "includes"
+    WORKOUT ||--o{ EXERCISEINSTANCE : "consists of"
+    EXERCISEINSTANCE }|--|| EXERCISE : "is type of"
