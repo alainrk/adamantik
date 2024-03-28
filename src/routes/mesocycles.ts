@@ -1,6 +1,5 @@
 import { FastifyInstance, FastifyRequest } from "fastify";
 import { Prisma } from "@prisma/client";
-import { a } from "vitest/dist/suite-a18diDsI";
 
 type GetMesocyclesRequest = FastifyRequest<{
   Querystring: { cursor?: number; take?: number };
