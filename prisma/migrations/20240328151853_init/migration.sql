@@ -75,6 +75,7 @@ CREATE TABLE "workouts" (
     "relativeOrder" INTEGER NOT NULL,
     "weekId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
+    "startedAt" DATETIME,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "completedAt" DATETIME,
     CONSTRAINT "workouts_weekId_fkey" FOREIGN KEY ("weekId") REFERENCES "weeks" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION,

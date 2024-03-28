@@ -44,7 +44,7 @@ model Mesocycle {
   createdAt     DateTime? @default(now())
   template      String
   user          User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  week          Week[]
+  weeks         Week[]
 
   @@map("mesocycles")
 }
@@ -63,15 +63,15 @@ model MesocycleTemplate {
 }
 
 model User {
-  id                Int                 @id @default(autoincrement())
-  provider          String
-  name              String
-  email             String              @unique
-  createdAt         DateTime?           @default(now())
-  mesocycle         Mesocycle[]
-  mesocycleTemplate MesocycleTemplate[]
-  Workout           Workout[]
-  Week              Week[]
+  id                 Int                 @id @default(autoincrement())
+  provider           String
+  name               String
+  email              String              @unique
+  createdAt          DateTime?           @default(now())
+  mesocycles         Mesocycle[]
+  mesocycleTemplates MesocycleTemplate[]
+  workouts           Workout[]
+  weeks              Week[]
 
   @@map("users")
 }
@@ -86,21 +86,23 @@ model Week {
   completedAt   DateTime?
   mesocycle     Mesocycle @relation(fields: [mesocycleId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   user          User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  workout       Workout[]
+  workouts      Workout[]
 
   @@map("weeks")
 }
 
 model Workout {
-  id               Int                @id @default(autoincrement())
-  relativeOrder    Int
-  weekId           Int
-  userId           Int
-  createdAt        DateTime?          @default(now())
-  completedAt      DateTime?
-  exerciseInstance ExerciseInstance[]
-  week             Week               @relation(fields: [weekId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  user             User               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                Int                @id @default(autoincrement())
+  relativeOrder     Int
+  weekId            Int
+  userId            Int
+  // This is null until the app starts the workout
+  startedAt         DateTime?
+  createdAt         DateTime?          @default(now())
+  completedAt       DateTime?
+  exerciseInstances ExerciseInstance[]
+  week              Week               @relation(fields: [weekId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  user              User               @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@map("workouts")
 }

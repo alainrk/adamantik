@@ -15,7 +15,7 @@ export default async function workouts(app: FastifyInstance) {
     const opts: Prisma.WorkoutFindManyArgs = {
       take: Number(take) || 10,
       orderBy: { id: "asc" },
-      include: { exerciseInstance: true },
+      include: { exerciseInstances: true },
     };
     if (cursor) {
       opts.cursor = { id: Number(cursor) };
