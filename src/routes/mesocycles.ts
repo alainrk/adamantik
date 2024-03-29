@@ -65,65 +65,89 @@ export default async function mesocycles(app: FastifyInstance) {
       name: string;
     };
 
-    const mesocycle = await app.prisma.mesocycle.create({
-      data: {
-        userId: +req.user.id,
-        name,
-        focus: "strength",
-        numberOfWeeks: 5,
-        numberOfDays: 4,
-        template: JSON.stringify({
-          days: [
-            [1, 2],
-            [1, 2],
-            [2, 3],
-          ],
-        }),
+    // TODO: Stub implementation for now
+    const id = await __stub__generateRandomMesocycle(app, +req.user.id, name);
+
+    const mesocycle = await app.prisma.mesocycle.findUniqueOrThrow({
+      where: { id },
+      include: {
+        weeks: {
+          include: {
+            workouts: {
+              include: { exerciseInstances: true },
+            },
+          },
+        },
       },
     });
 
-    // Artificially also create all the weeks and workouts
-    for (let i = 0; i < mesocycle.numberOfWeeks; i++) {
-      const week = await app.prisma.week.create({
+    return mesocycle;
+  });
+}
+
+async function __stub__generateRandomMesocycle(
+  app: FastifyInstance,
+  userId: number,
+  name: string
+): Promise<number> {
+  const mesocycle = await app.prisma.mesocycle.create({
+    data: {
+      userId,
+      name,
+      focus: "strength",
+      numberOfWeeks: 5,
+      numberOfDays: 4,
+      template: JSON.stringify({
+        days: [
+          [1, 2],
+          [1, 2],
+          [2, 3],
+        ],
+      }),
+    },
+  });
+
+  // Artificially also create all the weeks and workouts
+  for (let i = 0; i < mesocycle.numberOfWeeks; i++) {
+    const week = await app.prisma.week.create({
+      data: {
+        mesocycleId: mesocycle.id,
+        numberOfDays: mesocycle.numberOfDays,
+        relativeOrder: i,
+        userId: mesocycle.userId,
+      },
+    });
+
+    // Create workouts
+    let c = -1;
+    for (const day of JSON.parse(mesocycle.template).days) {
+      c++;
+      const workout = await app.prisma.workout.create({
         data: {
-          mesocycleId: mesocycle.id,
-          numberOfDays: mesocycle.numberOfDays,
-          relativeOrder: i,
+          relativeOrder: c,
+          weekId: week.id,
           userId: mesocycle.userId,
         },
       });
 
-      // Create workouts
-      let c = -1;
-      for (const day of JSON.parse(mesocycle.template).days) {
-        c++;
-        const workout = await app.prisma.workout.create({
+      // Create exercise instances
+      let d = -1;
+      for (const exerciseId of day) {
+        d++;
+        await app.prisma.exerciseInstance.create({
           data: {
-            relativeOrder: c,
-            weekId: week.id,
-            userId: mesocycle.userId,
+            relativeOrder: d,
+            exerciseId,
+            workoutId: workout.id,
+            weight: 0,
+            expectedRir: 1, // TODO: Precalc based on number of weeks
+            feedback: `{ "soreness": 0, "recover": 0, "pain": 0 }`,
+            sets: JSON.stringify([1]), // TODO: Precalc based on number of weeks
           },
         });
-
-        // Create exercise instances
-        let d = -1;
-        for (const exerciseId of day) {
-          d++;
-          await app.prisma.exerciseInstance.create({
-            data: {
-              relativeOrder: d,
-              exerciseId,
-              workoutId: workout.id,
-              weight: 0,
-              expectedRir: 1, // TODO: Precalc based on number of weeks
-              feedback: `{ "soreness": 0, "recover": 0, "pain": 0 }`,
-              sets: JSON.stringify([1]), // TODO: Precalc based on number of weeks
-            },
-          });
-        }
       }
     }
+  }
 
-    return mesocycle;
-  });
+  return mesocycle.id;
 }
