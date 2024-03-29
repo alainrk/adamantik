@@ -26,6 +26,7 @@ export default function authenticationMiddleware(app: FastifyInstance) {
   return async (request: FastifyRequest, reply: FastifyReply) => {
     // Get bearer token from request
     const token = request.headers.authorization?.replace("Bearer ", "");
+    console.log(token);
     if (!token) {
       reply.code(401).send({
         message: "Unauthorized, missing access token in the request.",

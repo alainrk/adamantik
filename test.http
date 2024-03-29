@@ -1,0 +1,37 @@
+@protocol = http://
+@hostname = localhost
+@port = 3000
+@host = {{protocol}}{{hostname}}:{{port}}
+@contentTypeJson = application/json
+
+@jwt=abc
+
+###
+
+# @name getUsers
+GET {{host}}/users HTTP/1.1
+Authorization: Bearer {{jwt}}
+
+###
+
+@weeks = {{$randomInt 3 6}}
+@days = {{$randomInt 3 6}}
+
+# @name createMesocycle
+POST {{host}}/mesocycles HTTP/1.1
+Authorization: Bearer {{jwt}}
+Content-Type: {{contentTypeJson}}
+
+{
+  "name": "Test meso {{$randomInt 1 1000000}}",
+  "focus": "strength",
+  "numberOfWeeks": {{weeks}},
+  "numberOfDays": {{days}},
+  "template": {
+    "days": [
+      [1, 2],
+      [1, 2],
+      [2, 3],
+    ],
+  },
+}
