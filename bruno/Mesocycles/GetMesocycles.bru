@@ -1,0 +1,13 @@
+meta {
+  name: Get Mesocycles
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/mesocycleas
+}
+
+headers {
+  Authorization: Bearer {{token}}
+}

@@ -9,6 +9,20 @@ type GetMesocycleRequest = FastifyRequest<{
   Params: { id: number };
 }>;
 
+type PostMesocycleRequestBody = {
+  name: string;
+  focus: string;
+  numberOfWeeks: number;
+  numberOfDays: number;
+  template: {
+    days: number[][];
+  };
+};
+
+type PostMesocycleRequest = FastifyRequest<{
+  Body: PostMesocycleRequestBody;
+}>;
+
 export default async function mesocycles(app: FastifyInstance) {
   app.get("/mesocycles", async (req: GetMesocyclesRequest, res) => {
     const { cursor, take } = req.query;
@@ -60,13 +74,9 @@ export default async function mesocycles(app: FastifyInstance) {
     return mesocycle;
   });
 
-  app.post("/mesocycles", async (req: FastifyRequest, res) => {
-    const { name } = req.body as {
-      name: string;
-    };
-
+  app.post("/mesocycles", async (req: PostMesocycleRequest, res) => {
     // TODO: Stub implementation for now
-    const id = await __stub__generateRandomMesocycle(app, +req.user.id, name);
+    const id = await createMesocycle(app, +req.user.id, req.body);
 
     const mesocycle = await app.prisma.mesocycle.findUniqueOrThrow({
       where: { id },
@@ -85,25 +95,22 @@ export default async function mesocycles(app: FastifyInstance) {
   });
 }
 
-async function __stub__generateRandomMesocycle(
+// TODO: Stub implementation for now
+// createMesocycle creates a new mesocycle including its empty weeks and workouts
+async function createMesocycle(
   app: FastifyInstance,
   userId: number,
-  name: string
+  body: PostMesocycleRequestBody
 ): Promise<number> {
   const mesocycle = await app.prisma.mesocycle.create({
     data: {
       userId,
-      name,
-      focus: "strength",
-      numberOfWeeks: 5,
-      numberOfDays: 4,
-      template: JSON.stringify({
-        days: [
-          [1, 2],
-          [1, 2],
-          [2, 3],
-        ],
-      }),
+      name: body.name,
+      focus: body.focus,
+      numberOfWeeks: body.numberOfWeeks,
+      numberOfDays: body.numberOfDays,
+      // TODO: Validate template especially about valid exerciseId
+      template: JSON.stringify(body.template),
     },
   });
 
