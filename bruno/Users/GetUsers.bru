@@ -1,8 +1,15 @@
-meta: {
-    name: Get Users
-    type: http
+meta {
+  name: Get Users
+  type: http
+  seq: 1
 }
 
-query: {
-    url: {{baseUrl}}/users
+get {
+  url: {{baseUrl}}/users
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{token}}
 }
