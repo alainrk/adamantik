@@ -1,0 +1,29 @@
+meta {
+  name: Create Mesocycle
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/mesocycles
+}
+
+body {
+  {
+    "name": "Test meso",
+    "focus": "strength",
+    "numberOfWeeks": 5,
+    "numberOfDays": 4,
+    "template": {
+      "days": [
+        [1, 2, 3],
+        [1, 2],
+        [2, 3]
+      ]
+    }
+  }
+}
+
+headers {
+  Authorization: Bearer {{token}}
+}
