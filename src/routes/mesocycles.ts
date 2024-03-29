@@ -1,6 +1,18 @@
 import { FastifyInstance, FastifyRequest } from "fastify";
 import { Prisma } from "@prisma/client";
 
+// Maps total_weeks to number of sets for a given week
+const MESO_MIN_WEEKS = 3;
+const MESO_MAX_WEEKS = 8;
+const RIR_MAP: Record<number, number[]> = {
+  3: [1, 0, 8],
+  4: [2, 1, 0, 8],
+  5: [3, 2, 1, 0, 8],
+  6: [3, 2, 2, 1, 0, 8],
+  7: [3, 2, 2, 1, 1, 0, 8],
+  8: [3, 3, 2, 2, 1, 1, 0, 8],
+};
+
 type GetMesocyclesRequest = FastifyRequest<{
   Querystring: { cursor?: number; take?: number };
 }>;
@@ -147,9 +159,11 @@ async function createMesocycle(
             exerciseId,
             workoutId: workout.id,
             weight: 0,
-            expectedRir: 1, // TODO: Precalc based on number of weeks
+            expectedRir: getRIR(d, mesocycle.numberOfWeeks),
             feedback: `{ "soreness": 0, "recover": 0, "pain": 0 }`,
-            sets: JSON.stringify([1]), // TODO: Precalc based on number of weeks
+            sets: JSON.stringify(
+              new Array(getNumberOfSets(d, mesocycle.numberOfWeeks)).fill(0)
+            ),
           },
         });
       }
@@ -157,4 +171,18 @@ async function createMesocycle(
   }
 
   return mesocycle.id;
+}
+
+function getRIR(weekNum: number, totalWeeks: number): number {
+  if (totalWeeks < MESO_MIN_WEEKS || totalWeeks > MESO_MAX_WEEKS) {
+    throw new Error("Invalid total weeks");
+  }
+
+  return RIR_MAP[totalWeeks][weekNum];
+}
+
+// TODO: This will be calculated at a later stage given the feeback on the preivous week and when starting this workout (end of the previous week), be default start with 2 sets at the first week implementation for now
+function getNumberOfSets(weekNum: number, totalWeeks: number): number {
+  if (weekNum === 0) return 2;
+  return 0;
 }
