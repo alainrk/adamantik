@@ -6,9 +6,15 @@ meta {
 
 post {
   url: {{baseUrl}}/mesocycles
+  body: json
+  auth: none
 }
 
-body {
+headers {
+  Authorization: Bearer {{token}}
+}
+
+body:json {
   {
     "name": "Test meso",
     "focus": "strength",
@@ -22,8 +28,4 @@ body {
       ]
     }
   }
-}
-
-headers {
-  Authorization: Bearer {{token}}
 }

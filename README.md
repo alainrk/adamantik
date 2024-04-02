@@ -49,6 +49,6 @@ Non-exhaustive list of immediate next steps:
 - [x] Protect routes with authn middleware
 - [x] Setup auth middleware and IDP to allow injection and testing
 - [x] Setup CI/CD
-- [ ] Protect routes based on user id - implement scoped access
+- [x] Protect routes based on user id - implement scoped access
+- [x] Create first useful CRUD routes
 - [ ] Add basic tests of authn flow
-- [ ] Create first useful CRUD routes
