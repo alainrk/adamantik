@@ -9,6 +9,7 @@ import idp from "./plugins/idp";
 import { PrismaClient } from "./libs/prisma";
 import workouts from "./routes/workouts";
 import mesocycles from "./routes/mesocycles";
+import exercises from "./routes/exercises";
 
 declare module "fastify" {
   interface FastifyInstance {
@@ -57,6 +58,7 @@ export default async function buildServer(
     app.register(users);
     app.register(workouts);
     app.register(mesocycles);
+    app.register(exercises);
     done();
   });
 

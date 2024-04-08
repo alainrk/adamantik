@@ -13,7 +13,7 @@ export default async function exercises(app: FastifyInstance) {
   app.get("/exercises", async (req: GetExercisesRequest, res) => {
     const { cursor, take } = req.query;
     const opts: Prisma.ExerciseFindManyArgs = {
-      take: Number(take) || 10,
+      take: Number(take) || 50,
       orderBy: { id: "asc" },
     };
     if (cursor) {
@@ -21,8 +21,10 @@ export default async function exercises(app: FastifyInstance) {
       opts.skip = !!cursor ? 1 : 0;
     }
 
-    // Only get mine
-    opts.where = { userId: req.user.id };
+    // Filter only mine or publicly available exercises
+    opts.where = {
+      OR: [{ userId: req.user.id }, { userId: null }],
+    };
 
     const exercises = await app.prisma.exercise.findMany(opts);
     const newCursor = exercises[exercises.length - 1]?.id;
@@ -34,7 +36,8 @@ export default async function exercises(app: FastifyInstance) {
       where: { id: +req.params.id },
     });
 
-    if (exercise.userId !== req.user.id) {
+    // Only get if mine or publicly available exercises
+    if (exercise.userId !== null && exercise.userId !== req.user.id) {
       res.code(401).send({ message: "Unauthorized" });
       return;
     }
