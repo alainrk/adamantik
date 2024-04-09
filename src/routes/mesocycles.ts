@@ -144,7 +144,16 @@ export default async function mesocycles(app: FastifyInstance) {
       });
     }
 
-    return mesocycle;
+    await app.prisma.mesocycle.update({
+      where: {
+        id: +req.params.id,
+      },
+      data: {
+        current: true,
+      },
+    });
+
+    return true;
   });
 
   app.post("/mesocycles", async (req: PostMesocycleRequest, res) => {
