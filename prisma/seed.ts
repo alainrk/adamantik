@@ -99,6 +99,7 @@ const mesocycles = [
     focus: "fullbody",
     numberOfWeeks: 3,
     numberOfDays: 2,
+    current: true,
     template: JSON.stringify({
       days: [
         [1, 2],
@@ -113,6 +114,7 @@ const mesocycles = [
     numberOfDays: 4,
     focus: "strength",
     name: "Bench press prep 2024",
+    current: false,
     template: JSON.stringify({
       days: [[1], [3], [2], [1]],
     }),
@@ -124,6 +126,7 @@ const mesocycles = [
     numberOfDays: 4,
     focus: "strength",
     name: "Bench press prep 2025",
+    current: true,
     template: JSON.stringify({
       days: [[1], [1], [1, 2, 3], [1]],
     }),

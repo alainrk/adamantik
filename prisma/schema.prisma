@@ -43,6 +43,7 @@ model Mesocycle {
   numberOfDays  Int
   createdAt     DateTime? @default(now())
   template      String
+  current       Boolean
   user          User      @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   weeks         Week[]
 

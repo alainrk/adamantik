@@ -32,6 +32,7 @@ CREATE TABLE "mesocycles" (
     "numberOfDays" INTEGER NOT NULL,
     "createdAt" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "template" TEXT NOT NULL,
+    "current" BOOLEAN NOT NULL,
     CONSTRAINT "mesocycles_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 

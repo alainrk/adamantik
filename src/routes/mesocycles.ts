@@ -1,4 +1,4 @@
-import { FastifyInstance, FastifyRequest } from "fastify";
+import fastify, { FastifyInstance, FastifyRequest } from "fastify";
 import { Prisma } from "@prisma/client";
 import { ExercisesValidator } from "../libs/validators";
 
@@ -102,6 +102,51 @@ export default async function mesocycles(app: FastifyInstance) {
     return mesocycle;
   });
 
+  app.patch("/mesocycles/start/:id", async (req: GetMesocycleRequest, res) => {
+    const openMesocycles = await app.prisma.mesocycle.findFirst({
+      where: {
+        AND: {
+          id: +req.params.id,
+          userId: +req.params.id,
+          current: false,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    // There is already another open mesocycle that must be ended first by the user
+    if (openMesocycles) {
+      res.code(409).send({
+        message:
+          "Cannot open another mesocycle while the current one is still open",
+      });
+      return;
+    }
+
+    const mesocycle = await app.prisma.mesocycle.findFirst({
+      where: {
+        AND: {
+          id: +req.params.id,
+          userId: +req.params.id,
+        },
+      },
+      select: {
+        id: true,
+        current: true,
+      },
+    });
+
+    if (!mesocycle) {
+      res.code(404).send({
+        message: "Cannot open this mesocycle as it does not exist for the user",
+      });
+    }
+
+    return mesocycle;
+  });
+
   app.post("/mesocycles", async (req: PostMesocycleRequest, res) => {
     let id: number;
     try {
@@ -145,6 +190,7 @@ async function createMesocycle(
       focus: body.focus,
       numberOfWeeks: body.numberOfWeeks,
       numberOfDays: body.numberOfDays,
+      current: false,
       // TODO: Validate template especially about valid exerciseId
       template: JSON.stringify(template),
     },
