@@ -35,15 +35,15 @@ const envToLogger = (env: string) => {
 
 export default async function buildServer(
   config: Config,
-  prisma: PrismaClient
+  prisma: PrismaClient,
 ): Promise<FastifyInstance> {
   const app = fastify({
     logger: envToLogger(config.env),
   });
 
-  await app.decorate("config", config);
+  app.decorate("config", config);
   // TODO: Try to fix this in testing env, prisma doesn't get decorated for some reason.
-  await app.decorate("prisma", prisma);
+  app.decorate("prisma", prisma);
 
   // Setup IDP funcionalities and OAuth2 plugin if config requires it
   await app.register(idp);

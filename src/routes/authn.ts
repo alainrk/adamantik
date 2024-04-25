@@ -35,3 +35,4 @@ export default async function authn(app: FastifyInstance) {
     reply.send({ token: jwt });
   });
 }
+
