@@ -10,7 +10,7 @@ type GetUserRequest = FastifyRequest<{
 }>;
 
 export default async function users(app: FastifyInstance) {
-  app.get("/users", async (req: GetUsersRequest, res) => {
+  app.get("/users", async (req: GetUsersRequest, _res) => {
     const { cursor, take } = req.query;
     const select: Prisma.UserSelect = {
       name: true,

@@ -19,7 +19,7 @@ declare module "jsonwebtoken" {
 
 export default function authenticationMiddleware(app: FastifyInstance) {
   // Set default user data, it doesn't use decorate request because of FSTDEP006
-  app.addHook("onRequest", async (req, reply) => {
+  app.addHook("onRequest", async (req, _reply) => {
     req.user = { id: 0, email: "" };
   });
 

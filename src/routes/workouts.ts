@@ -10,7 +10,7 @@ type GetWorkoutRequest = FastifyRequest<{
 }>;
 
 export default async function workouts(app: FastifyInstance) {
-  app.get("/workouts", async (req: GetWorkoutsRequest, res) => {
+  app.get("/workouts", async (req: GetWorkoutsRequest, _res) => {
     const { cursor, take } = req.query;
     const opts: Prisma.WorkoutFindManyArgs = {
       take: Number(take) || 10,

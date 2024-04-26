@@ -1,4 +1,4 @@
-import fastify, { FastifyInstance, FastifyRequest } from "fastify";
+import { FastifyInstance, FastifyRequest } from "fastify";
 import { Prisma } from "@prisma/client";
 import { ExercisesValidator } from "../libs/validators";
 
@@ -52,7 +52,7 @@ class InvalidMesocycleTemplate extends Error {
 const exercisesValidator = ExercisesValidator.getValidator();
 
 export default async function mesocycles(app: FastifyInstance) {
-  app.get("/mesocycles", async (req: GetMesocyclesRequest, res) => {
+  app.get("/mesocycles", async (req: GetMesocyclesRequest, _res) => {
     const { cursor, take } = req.query;
     const opts: Prisma.MesocycleFindManyArgs = {
       take: Number(take) || 10,
@@ -189,7 +189,7 @@ export default async function mesocycles(app: FastifyInstance) {
 async function createMesocycle(
   app: FastifyInstance,
   userId: number,
-  body: PostMesocycleRequestBody
+  body: PostMesocycleRequestBody,
 ): Promise<number> {
   const template = await validateTemplateOrThrow(body.template);
   const mesocycle = await app.prisma.mesocycle.create({
@@ -242,7 +242,7 @@ async function createMesocycle(
             expectedRir: getRIR(d, mesocycle.numberOfWeeks),
             feedback: JSON.stringify(getEmptyFeedback()),
             sets: JSON.stringify(
-              new Array(getNumberOfSets(d, mesocycle.numberOfWeeks)).fill(0)
+              new Array(getNumberOfSets(d, mesocycle.numberOfWeeks)).fill(0),
             ),
           },
         });
@@ -268,25 +268,25 @@ function getEmptyFeedback(): ExerciseFeedback {
 // TODO: This will be calculated at a later stage given the feeback on the preivous week
 // and when starting this workout (end of the previous week), be default start with 2
 // sets at the first week implementation for now
-function getNumberOfSets(weekNum: number, totalWeeks: number): number {
+function getNumberOfSets(weekNum: number, _totalWeeks: number): number {
   if (weekNum === 0) return 2;
   return 0;
 }
 
 async function validateTemplateOrThrow(
-  template: PostMesocycleRequestBody["template"]
+  template: PostMesocycleRequestBody["template"],
 ) {
   const { days } = template;
   if (!Array.isArray(days) || days.length === 0) {
     throw new InvalidMesocycleTemplate(
-      "Invalid template, days should be a non-empty array of arrays of exerciseIds"
+      "Invalid template, days should be a non-empty array of arrays of exerciseIds",
     );
   }
 
   for (const day of days) {
     if (!Array.isArray(day) || day.length === 0) {
       throw new InvalidMesocycleTemplate(
-        "Invalid template, each day should be a non-empty array of exerciseIds"
+        "Invalid template, each day should be a non-empty array of exerciseIds",
       );
     }
 
