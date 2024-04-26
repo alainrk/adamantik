@@ -22,9 +22,7 @@ describe("Server", () => {
       name: "Test One",
       email: "asd@qwerty.com",
       provider: "google",
-      providerIdToken: "123",
       createdAt: new Date(),
-      providerAccessToken: "123",
     });
     app = await buildServer(getConfig(), prisma);
   });
