@@ -1,21 +1,6 @@
-// Ignore this file for TS
-
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import { MUSCLE_GROUP } from "../src/symbols/symbols";
 const prisma = new PrismaClient();
-
-const MUSCLE_GROUP_CHEST = 1;
-const MUSCLE_GROUP_ABS = 2;
-const MUSCLE_GROUP_BACK = 3;
-const MUSCLE_GROUP_TRAPS_SHOULDERS = 4;
-const MUSCLE_GROUP_FOREARMS = 5;
-const MUSCLE_GROUP_CORE = 6;
-const MUSCLE_GROUP_CALVES = 7;
-const MUSCLE_GROUP_GLUTES = 8;
-const MUSCLE_GROUP_HAMSTRINGS = 9;
-const MUSCLE_GROUP_QUADS = 10;
-const MUSCLE_GROUP_TRICEPS = 11;
-const MUSCLE_GROUP_BICEPS = 12;
-const MUSCLE_GROUP_TRAPS = 13;
 
 const users = [
   {
@@ -35,21 +20,21 @@ const users = [
 const exercises = [
   {
     id: 1,
-    muscleGroup: MUSCLE_GROUP_QUADS,
+    muscleGroup: MUSCLE_GROUP.QUADS,
     name: "High Bar Squat",
     videoUrl: "https://www.youtube.com/watch?v=i7J5h7BJ07g",
     userId: null,
   },
   {
     id: 2,
-    muscleGroup: MUSCLE_GROUP_CHEST,
+    muscleGroup: MUSCLE_GROUP.CHEST,
     name: "Bench Press (Wide Grip)",
     videoUrl: "https://www.youtube.com/watch?v=EeE3f4VWFDo",
     userId: null,
   },
   {
     id: 3,
-    muscleGroup: MUSCLE_GROUP_BACK,
+    muscleGroup: MUSCLE_GROUP.BACK,
     name: "Pulldown (Normal Grip)",
     videoUrl: "https://www.youtube.com/watch?v=EUIri47Epcg",
     userId: null,

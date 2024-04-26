@@ -1,0 +1,15 @@
+export const MUSCLE_GROUP = {
+  CHEST: 1,
+  ABS: 2,
+  BACK: 3,
+  TRAPS_SHOULDERS: 4,
+  FOREARMS: 5,
+  CORE: 6,
+  CALVES: 7,
+  GLUTES: 8,
+  HAMSTRINGS: 9,
+  QUADS: 10,
+  TRICEPS: 11,
+  BICEPS: 12,
+  TRAPS: 13,
+};
